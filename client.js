@@ -1,10 +1,11 @@
-var myPromise = new Promise(function(resolve, reject) {
-	setTimeout(resolve, 200);
-});
-
 let updater = state => ({
 	update: ({ id, position, size }) => {
-		state.players[id] = { position: position, size: size };
+		if (position) {
+			state.players[id] = { ...state.players[id], position: position };
+		}
+		if (size) {
+			state.players[id] = { ...state.players[id], size: size };
+		}
 	}
 });
 let remover = state => ({
