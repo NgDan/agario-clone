@@ -29,12 +29,12 @@ let PlayersConstructor = () => {
 	let playersState = {
 		players: {}
 	};
-	return {
+	return Object.freeze({
 		playersState,
 		...updater(playersState),
 		...remover(playersState),
 		...drawer(playersState)
-	};
+	});
 };
 
 function setup() {
