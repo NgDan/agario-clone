@@ -1,65 +1,96 @@
-// TO DO
-// implement Players class
-// implement handleKeys function
-
 var myPromise = new Promise(function(resolve, reject) {
-  setTimeout(resolve, 200);
+	setTimeout(resolve, 200);
 });
 
+let updater = state => ({
+	update: ({ id, position, size }) => {
+		state.players[id] = { position: position, size: size };
+	}
+});
+let remover = state => ({
+	remove: id => {
+		delete state.players[id];
+	}
+});
+let drawer = state => ({
+	draw: () => {
+		if (Object.entries(state.players).length > 0) {
+			for (const player of Object.keys(state.players)) {
+				ellipse(
+					state.players[player].position.x,
+					state.players[player].position.y,
+					state.players[player].size
+				);
+			}
+		}
+	}
+});
+let PlayersConstructor = () => {
+	let playersState = {
+		players: {}
+	};
+	return {
+		playersState,
+		...updater(playersState),
+		...remover(playersState),
+		...drawer(playersState)
+	};
+};
+
 function setup() {
-  socket = io();
-  frameRate(60);
-  createCanvas(800, 600);
+	socket = io();
+	frameRate(60);
+	createCanvas(800, 600);
 
-  player = new Player({ x: 50, y: 50 }, 80);
+	player = new Player({ x: 50, y: 50 }, 80);
 
-  players = new Players();
+	players = PlayersConstructor();
+	console.log(players);
+	food = new Food();
 
-  food = new Food();
+	socket.on('connect', function() {
+		setTimeout(() => {
+			socket.emit('request-food');
+			socket.emit('request-players');
+		}, 500);
+	});
 
-  socket.on("connect", function() {
-    setTimeout(() => {
-      socket.emit("request-food");
-      socket.emit("request-players");
-    }, 500);
-  });
+	socket.on('request-players', function() {
+		console.log("player's position requested!");
+		socket.emit('socketID', {
+			id: socket.id,
+			position: player.position,
+			size: player.size
+		});
+	});
 
-  socket.on("request-players", function() {
-    console.log("player's position requested!");
-    socket.emit("socketID", {
-      id: socket.id,
-      position: player.position,
-      size: player.size
-    });
-  });
+	socket.on('send-food', function(foodFromServer) {
+		food.setFood(foodFromServer.food, foodFromServer.size);
+	});
 
-  socket.on("send-food", function(foodFromServer) {
-    food.setFood(foodFromServer.food, foodFromServer.size);
-  });
+	socket.on('piece-eaten', function(id) {
+		food.deletePiece(id);
+	});
 
-  socket.on("piece-eaten", function(id) {
-    food.deletePiece(id);
-  });
+	socket.on('broadcast', function(data) {
+		players.update(data);
+	});
 
-  socket.on("broadcast", function(data) {
-    players.update(data);
-  });
-
-  socket.on("user-disconnected", function(id) {
-    players.remove(id);
-  });
+	socket.on('user-disconnected', function(id) {
+		players.remove(id);
+	});
 }
 
 function draw() {
-  background(100);
-  player.draw();
-  player.handleKeys();
-  players.draw();
-  food.draw();
-  food.collisionDetector(
-    player.position.x,
-    player.position.y,
-    player.size,
-    player
-  );
+	background(100);
+	player.draw();
+	player.handleKeys();
+	players.draw();
+	food.draw();
+	food.collisionDetector(
+		player.position.x,
+		player.position.y,
+		player.size,
+		player
+	);
 }
