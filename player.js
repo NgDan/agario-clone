@@ -54,6 +54,7 @@ class Player {
 	draw() {
 		push();
 		fill('red');
+		translate(initialPlayerPosition.x, initialPlayerPosition.y);
 		translate(-this.position.x, -this.position.y);
 		ellipse(this.position.x, this.position.y, this.size);
 		fill('white');
