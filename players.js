@@ -1,59 +1,39 @@
-class Players {
-	constructor() {
-		this.players = {};
+let updater = state => ({
+	update: ({ id, position, size }) => {
+		if (position) {
+			state.players[id] = { ...state.players[id], position: position };
+		}
+		if (size) {
+			state.players[id] = { ...state.players[id], size: size };
+		}
 	}
-	update({ id, position, size }) {
-		this.players[id] = { position: position, size: size };
+});
+let remover = state => ({
+	remove: id => {
+		delete state.players[id];
 	}
-
-	remove(id) {
-		delete this.players[id];
-	}
-
-	draw() {
-		if (Object.entries(this.players).length > 0) {
-			for (const player of Object.keys(this.players)) {
-				// console.log();
+});
+let drawer = state => ({
+	draw: () => {
+		if (Object.entries(state.players).length > 0) {
+			for (const player of Object.keys(state.players)) {
 				ellipse(
-					this.players[player].position.x,
-					this.players[player].position.y,
-					this.players[player].size
+					state.players[player].position.x,
+					state.players[player].position.y,
+					state.players[player].size
 				);
 			}
 		}
 	}
-}
-
-// let updater = state => ({
-// 	update: (id, position, size) => {
-// 		state.players[id] == { position: position, size: size };
-// 	}
-// });
-// let remover = state => ({
-// 	remove: id => {
-// 		delete state.players[id];
-// 	}
-// });
-// let drawer = state => ({
-// 	draw: () => {
-// 		if (Object.entries(state.players).length > 0) {
-// 			for (const player of Object.keys(state.players)) {
-// 				ellipse(
-// 					state.players[player].position.x,
-// 					state.players[player].position.y,
-// 					state.players[player].size
-// 				);
-// 			}
-// 		}
-// 	}
-// });
-// let PlayersConstructor = () => {
-// 	let playersState = {
-// 		players: {}
-// 	};
-// 	return {
-// 		...updater(playersState),
-// 		...removeListener(playersState),
-// 		...drawer(playersState)
-// 	};
-// };
+});
+let PlayersConstructor = () => {
+	let playersState = {
+		players: {}
+	};
+	return Object.freeze({
+		playersState,
+		...updater(playersState),
+		...remover(playersState),
+		...drawer(playersState)
+	});
+};

@@ -1,43 +1,3 @@
-let updater = state => ({
-	update: ({ id, position, size }) => {
-		if (position) {
-			state.players[id] = { ...state.players[id], position: position };
-		}
-		if (size) {
-			state.players[id] = { ...state.players[id], size: size };
-		}
-	}
-});
-let remover = state => ({
-	remove: id => {
-		delete state.players[id];
-	}
-});
-let drawer = state => ({
-	draw: () => {
-		if (Object.entries(state.players).length > 0) {
-			for (const player of Object.keys(state.players)) {
-				ellipse(
-					state.players[player].position.x,
-					state.players[player].position.y,
-					state.players[player].size
-				);
-			}
-		}
-	}
-});
-let PlayersConstructor = () => {
-	let playersState = {
-		players: {}
-	};
-	return Object.freeze({
-		playersState,
-		...updater(playersState),
-		...remover(playersState),
-		...drawer(playersState)
-	});
-};
-
 function setup() {
 	socket = io();
 	frameRate(60);
@@ -82,11 +42,14 @@ function setup() {
 	});
 }
 
+// TODO: connect player's API to client food's API to translate food. Maybe emit an event from player's API everytime it moves ?
+
 function draw() {
 	background(100);
 	player.draw();
 	player.handleKeys();
 	players.draw();
+	// food.translateFood(1, 1);
 	food.draw();
 	food.collisionDetector(
 		player.position.x,
