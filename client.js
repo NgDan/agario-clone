@@ -3,7 +3,10 @@ function setup() {
 	frameRate(60);
 	createCanvas(800, 600);
 
-	player = new Player({ x: 50, y: 50 }, 80);
+	player = new Player(
+		{ x: initialPlayerPosition.x, y: initialPlayerPosition.y },
+		80
+	);
 
 	players = PlayersConstructor();
 	console.log(players);
@@ -49,7 +52,11 @@ function draw() {
 	player.draw();
 	player.handleKeys();
 	players.draw();
-	// food.translateFood(1, 1);
+	// console.log(player.notifyChangesInPosition());
+	food.translateFood(
+		player.notifyChangesInPosition().x,
+		player.notifyChangesInPosition().y
+	);
 	food.draw();
 	food.collisionDetector(
 		player.position.x,
