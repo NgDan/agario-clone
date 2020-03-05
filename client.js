@@ -50,8 +50,6 @@ function setup() {
 	});
 }
 
-// TODO: connect player's API to client food's API to translate food. Maybe emit an event from player's API everytime it moves ?
-
 function draw() {
 	background(100);
 	player.draw();
