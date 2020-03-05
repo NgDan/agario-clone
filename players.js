@@ -30,7 +30,6 @@ let drawer = state => ({
 	draw: translateVector => {
 		state.translateVector.x = state.translateVector.x + translateVector.x;
 		state.translateVector.y = state.translateVector.y + translateVector.y;
-		console.log(state.translateVector);
 		if (Object.entries(state.players).length > 0) {
 			for (const player of Object.keys(state.players)) {
 				push();

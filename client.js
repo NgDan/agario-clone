@@ -43,6 +43,11 @@ function setup() {
 	socket.on('user-disconnected', function(id) {
 		players.remove(id);
 	});
+	document.addEventListener('visibilitychange', function() {
+		if (document.visibilityState === 'visible') {
+			socket.emit('request-players');
+		}
+	});
 }
 
 // TODO: connect player's API to client food's API to translate food. Maybe emit an event from player's API everytime it moves ?
