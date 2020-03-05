@@ -40,7 +40,6 @@ class Player {
 		if (keyIsDown(DOWN_ARROW)) {
 			pos.y = -this.speed;
 		}
-		// console.log(pos);
 		return pos;
 	}
 

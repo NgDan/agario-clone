@@ -31,7 +31,7 @@ class Food {
 	translateFood(x, y) {
 		this.translateVector.x = this.translateVector.x + x;
 		this.translateVector.y = this.translateVector.y + y;
-		console.log(this.translateVector);
+		// console.log(translateVector);
 		translate(this.translateVector.x, this.translateVector.y);
 	}
 

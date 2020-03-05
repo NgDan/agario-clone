@@ -51,7 +51,7 @@ function draw() {
 	background(100);
 	player.draw();
 	player.handleKeys();
-	players.draw();
+	players.draw(player.notifyChangesInPosition());
 	// console.log(player.notifyChangesInPosition());
 	food.translateFood(
 		player.notifyChangesInPosition().x,
