@@ -50,6 +50,9 @@ function setup() {
 	});
 }
 
+// TODO: sometimes the translate vector and the actual position get out of sync.
+// TODO: make translate func reusable
+
 function draw() {
 	background(100);
 	player.draw();
