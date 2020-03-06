@@ -48,6 +48,12 @@ function setup() {
 			socket.emit('request-players');
 		}
 	});
+
+	//temporary for development purposes
+	document.querySelector('.request-food').addEventListener('click', () => {
+		console.log('click');
+		socket.emit('generate-food');
+	});
 }
 
 // TODO: sometimes the translate vector and the actual position get out of sync.

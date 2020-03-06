@@ -13,11 +13,10 @@ io.on('connection', function(socket) {
 	});
 
 	socket.on('request-food', function() {
-		socket.emit('send-food', food);
+		socket.broadcast.emit('send-food', food);
 	});
 
 	socket.on('request-players', function() {
-		// socket.emit("send-food", food);
 		console.log('players requested!');
 		socket.broadcast.emit('request-players');
 	});
@@ -35,6 +34,11 @@ io.on('connection', function(socket) {
 		console.log('piece of food eaten: ', id);
 		food.deletePiece(id);
 		socket.broadcast.emit('piece-eaten', id);
+	});
+
+	socket.on('generate-food', function(data) {
+		food.generate(200);
+		socket.emit('send-food', food);
 	});
 });
 
