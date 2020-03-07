@@ -1,7 +1,10 @@
-let app = require('express')();
+let express = require('express');
+let app = express();
 let http = require('http').createServer(app);
 let io = require('socket.io')(http);
 let Food = require('./server-food.js');
+
+app.use(express.static('./'));
 
 let food = new Food({ x: 800, y: 600 }, 10);
 
@@ -13,6 +16,7 @@ io.on('connection', function(socket) {
 	});
 
 	socket.on('request-food', function() {
+		socket.emit('send-food', food);
 		socket.broadcast.emit('send-food', food);
 	});
 
@@ -39,26 +43,8 @@ io.on('connection', function(socket) {
 	socket.on('generate-food', function(data) {
 		food.generate(200);
 		socket.emit('send-food', food);
+		socket.broadcast.emit('send-food', food);
 	});
-});
-
-app.get('/', function(req, res) {
-	res.sendFile(__dirname + '/index.html');
-});
-app.get('/client.js', function(req, res) {
-	res.sendFile(__dirname + '/client.js');
-});
-app.get('/player.js', function(req, res) {
-	res.sendFile(__dirname + '/player.js');
-});
-app.get('/players.js', function(req, res) {
-	res.sendFile(__dirname + '/players.js');
-});
-app.get('/client-food.js', function(req, res) {
-	res.sendFile(__dirname + '/client-food.js');
-});
-app.get('/constants.js', function(req, res) {
-	res.sendFile(__dirname + '/constants.js');
 });
 
 http.listen(3000, function() {
