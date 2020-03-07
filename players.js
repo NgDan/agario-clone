@@ -28,8 +28,8 @@ let remover = state => ({
 });
 let drawer = state => ({
 	draw: translateVector => {
-		state.translateVector.x = state.translateVector.x + translateVector.x;
-		state.translateVector.y = state.translateVector.y + translateVector.y;
+		state.translateVector.x = -translateVector.x;
+		state.translateVector.y = -translateVector.y;
 		if (Object.entries(state.players).length > 0) {
 			for (const player of Object.keys(state.players)) {
 				push();

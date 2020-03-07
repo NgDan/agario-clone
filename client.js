@@ -61,16 +61,20 @@ function setup() {
 // TODO: make translate func reusable
 // TODO: refactor to es6
 // DO measurements to get an idea of the bandwidth used when playing
+// make notifyChangesInPosition consistent on both players and
 
 function draw() {
 	background(100);
 	player.draw();
 	player.handleKeys();
-	players.draw(player.notifyChangesInPosition());
+	players.draw({
+		x: player.position.x - initialPlayerPosition.x,
+		y: player.position.y - initialPlayerPosition.y
+	});
 	// console.log(player.notifyChangesInPosition());
 	food.translateFood(
-		player.notifyChangesInPosition().x,
-		player.notifyChangesInPosition().y
+		player.position.x - initialPlayerPosition.x,
+		player.position.y - initialPlayerPosition.y
 	);
 	food.draw();
 	food.collisionDetector(
