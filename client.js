@@ -56,8 +56,11 @@ function setup() {
 	});
 }
 
-// TODO: sometimes the translate vector and the actual position get out of sync.
+// TODO: when two arrow keys are pressed at the same time
+// the translate vector and the actual position get out of sync.
 // TODO: make translate func reusable
+// TODO: refactor to es6
+// DO measurements to get an idea of the bandwidth used when playing
 
 function draw() {
 	background(100);
