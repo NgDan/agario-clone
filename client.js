@@ -61,7 +61,7 @@ function setup() {
 // TODO: make translate func reusable
 // TODO: refactor to es6
 // DO measurements to get an idea of the bandwidth used when playing
-// make notifyChangesInPosition consistent on both players and
+// make notifyChangesInPosition consistent on both players and food
 
 function draw() {
 	background(100);
