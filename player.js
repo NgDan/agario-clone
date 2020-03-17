@@ -19,7 +19,7 @@ class Player {
 		if (keyIsDown(DOWN_ARROW)) {
 			this.position.y = this.position.y + this.speed;
 		}
-		socket.emit('socketID', {
+		socket.emit('player-pos-and-size', {
 			id: socket.id,
 			position: this.position,
 			size: this.size
