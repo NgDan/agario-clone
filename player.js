@@ -26,23 +26,6 @@ class Player {
 		});
 	}
 
-	notifyChangesInPosition() {
-		let pos = { x: 0, y: 0 };
-		if (keyIsDown(LEFT_ARROW)) {
-			pos.x = this.speed;
-		}
-		if (keyIsDown(RIGHT_ARROW)) {
-			pos.x = -this.speed;
-		}
-		if (keyIsDown(UP_ARROW)) {
-			pos.y = this.speed;
-		}
-		if (keyIsDown(DOWN_ARROW)) {
-			pos.y = -this.speed;
-		}
-		return pos;
-	}
-
 	updatePosition(position) {
 		this.position = position;
 	}

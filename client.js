@@ -12,38 +12,38 @@ function setup() {
 	console.log(players);
 	food = new Food();
 
-	socket.on('connect', function() {
+	socket.on('connect', () => {
 		setTimeout(() => {
 			socket.emit('request-food');
 			socket.emit('request-players');
 		}, 500);
 	});
 
-	socket.on('request-players', function() {
+	socket.on('request-players', () => {
 		console.log("player's position requested!");
-		socket.emit('socketID', {
+		socket.emit('player-pos-and-size', {
 			id: socket.id,
 			position: player.position,
 			size: player.size
 		});
 	});
 
-	socket.on('send-food', function(foodFromServer) {
+	socket.on('send-food', foodFromServer => {
 		food.setFood(foodFromServer.food, foodFromServer.size);
 	});
 
-	socket.on('piece-eaten', function(id) {
+	socket.on('piece-eaten', id => {
 		food.deletePiece(id);
 	});
 
-	socket.on('broadcast', function(data) {
+	socket.on('broadcast', data => {
 		players.update(data);
 	});
 
-	socket.on('user-disconnected', function(id) {
+	socket.on('user-disconnected', id => {
 		players.remove(id);
 	});
-	document.addEventListener('visibilitychange', function() {
+	document.addEventListener('visibilitychange', () => {
 		if (document.visibilityState === 'visible') {
 			socket.emit('request-players');
 		}
@@ -56,12 +56,10 @@ function setup() {
 	});
 }
 
-// TODO: when two arrow keys are pressed at the same time
-// the translate vector and the actual position get out of sync.
 // TODO: make translate func reusable
 // TODO: refactor to es6
 // DO measurements to get an idea of the bandwidth used when playing
-// make notifyChangesInPosition consistent on both players and food
+// make player.position object consistent on both players and food
 
 function draw() {
 	background(100);
@@ -71,7 +69,6 @@ function draw() {
 		x: player.position.x - initialPlayerPosition.x,
 		y: player.position.y - initialPlayerPosition.y
 	});
-	// console.log(player.notifyChangesInPosition());
 	food.translateFood(
 		player.position.x - initialPlayerPosition.x,
 		player.position.y - initialPlayerPosition.y
