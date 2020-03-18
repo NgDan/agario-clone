@@ -60,6 +60,8 @@ function setup() {
 // TODO: refactor to es6
 // DO measurements to get an idea of the bandwidth used when playing
 // make player.position object consistent on both players and food
+// implement "eat player functionality"
+// zoom out when player grows
 
 function draw() {
 	background(100);
