@@ -1,5 +1,9 @@
 {
-    "prettier.jsxSingleQuote": true,
-    "prettier.singleQuote": true,
-    "prettier.useTabs": true
+	"prettier.jsxSingleQuote": true,
+	"prettier.singleQuote": true,
+	"prettier.useTabs": true,
+	"workbench.colorCustomizations": {
+		// "editor.selectionBackground": "#88d154"
+		// "editor.selectionHighlightBackground": "red"
+	}
 }
