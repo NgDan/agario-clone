@@ -24,23 +24,24 @@ function setup() {
 		socket.emit('player-pos-and-size', {
 			id: socket.id,
 			position: player.position,
-			size: player.size
+			size: player.size,
 		});
 	});
 
-	socket.on('send-food', foodFromServer => {
+	socket.on('send-food', (foodFromServer) => {
+		console.log('food shape: ', foodFromServer.food);
 		food.setFood(foodFromServer.food, foodFromServer.size);
 	});
 
-	socket.on('piece-eaten', id => {
+	socket.on('piece-eaten', (id) => {
 		food.deletePiece(id);
 	});
 
-	socket.on('broadcast', data => {
+	socket.on('broadcast', (data) => {
 		players.update(data);
 	});
 
-	socket.on('user-disconnected', id => {
+	socket.on('user-disconnected', (id) => {
 		players.remove(id);
 	});
 	document.addEventListener('visibilitychange', () => {
@@ -69,7 +70,7 @@ function draw() {
 	player.handleKeys();
 	players.draw({
 		x: player.position.x - initialPlayerPosition.x,
-		y: player.position.y - initialPlayerPosition.y
+		y: player.position.y - initialPlayerPosition.y,
 	});
 	food.translateFood(
 		player.position.x - initialPlayerPosition.x,

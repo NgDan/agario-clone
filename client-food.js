@@ -29,10 +29,8 @@ class Food {
 	}
 
 	translateFood(x, y) {
-		console.log({ x: x, y: y });
 		this.translateVector.x = -x;
 		this.translateVector.y = -y;
-		// console.log(translateVector);
 		translate(this.translateVector.x, this.translateVector.y);
 	}
 
