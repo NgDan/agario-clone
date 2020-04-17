@@ -65,6 +65,8 @@ function setup() {
 // zoom out when player grows
 
 function draw() {
+	// update state, state = update(state)
+	// render state, render(state)
 	background(100);
 	player.draw();
 	player.handleKeys();
