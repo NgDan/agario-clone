@@ -4,13 +4,13 @@ let http = require('http').createServer(app);
 let io = require('socket.io')(http);
 let Food = require('./server-food.js');
 
-app.use(express.static('./'));
+app.use(express.static('../client'));
 
 let food = new Food({ x: 800, y: 600 }, 10);
 
 food.generate(200);
 
-io.on('connection', socket => {
+io.on('connection', (socket) => {
 	socket.on('connect', () => {
 		socket.broadcast.emit('broadcast', data);
 	});
@@ -25,7 +25,7 @@ io.on('connection', socket => {
 		socket.broadcast.emit('request-players');
 	});
 
-	socket.on('player-pos-and-size', data => {
+	socket.on('player-pos-and-size', (data) => {
 		socket.broadcast.emit('broadcast', data);
 	});
 
@@ -34,13 +34,13 @@ io.on('connection', socket => {
 		// console.log("user disconnected", socket);
 	});
 
-	socket.on('piece-eaten', id => {
+	socket.on('piece-eaten', (id) => {
 		console.log('piece of food eaten: ', id);
 		food.deletePiece(id);
 		socket.broadcast.emit('piece-eaten', id);
 	});
 
-	socket.on('generate-food', data => {
+	socket.on('generate-food', (data) => {
 		food.generate(200);
 		socket.emit('send-food', food);
 		socket.broadcast.emit('send-food', food);
