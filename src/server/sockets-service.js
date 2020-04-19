@@ -1,8 +1,12 @@
-let express = require('express');
+import express from 'express';
 let app = express();
-let http = require('http').createServer(app);
-let io = require('socket.io')(http);
-let Food = require('./server-food.js');
+import http from 'http';
+let httpServer = http.createServer(app);
+// let http = require('http').createServer(app);
+import socketio from 'socket.io';
+let io = socketio(httpServer);
+// let io = require('socket.io')(http);
+import Food from './server-food.js';
 
 app.use(express.static('../client'));
 
@@ -47,6 +51,6 @@ io.on('connection', (socket) => {
 	});
 });
 
-http.listen(3000, () => {
+httpServer.listen(3000, () => {
 	console.log('listening on *:3000');
 });

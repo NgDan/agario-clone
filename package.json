@@ -3,6 +3,7 @@
 	"version": "1.0.0",
 	"description": "browser multiplayer game based on websockets",
 	"main": "sockets-service.js",
+	"type": "module",
 	"scripts": {
 		"start": "cd src/server && nodemon sockets-service.js",
 		"test": "echo \"Error: no test specified\" && exit 1",
