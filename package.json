@@ -4,7 +4,7 @@
 	"description": "browser multiplayer game based on websockets",
 	"main": "sockets-service.js",
 	"scripts": {
-		"start": "nodemon sockets-service.js",
+		"start": "cd src && nodemon sockets-service.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
