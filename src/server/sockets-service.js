@@ -1,12 +1,12 @@
 import express from 'express';
-let app = express();
 import http from 'http';
-let httpServer = http.createServer(app);
 // let http = require('http').createServer(app);
 import socketio from 'socket.io';
-let io = socketio(httpServer);
 // let io = require('socket.io')(http);
 import Food from './server-food.js';
+let app = express();
+let httpServer = http.createServer(app);
+let io = socketio(httpServer);
 
 app.use(express.static('../client'));
 

@@ -20,7 +20,10 @@
 	},
 	"homepage": "https://github.com/NgDan/agario-clone#readme",
 	"devDependencies": {
+		"express": "^4.17.1",
+		"socket.io": "^2.3.0",
 		"webpack": "^4.42.1",
 		"webpack-cli": "^3.3.11"
-	}
+	},
+	"dependencies": {}
 }

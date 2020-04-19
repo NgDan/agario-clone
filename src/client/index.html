@@ -2,6 +2,10 @@
 <html>
 	<head>
 		<title>Socket.IO</title>
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="font-src 'self' data:; img-src 'self' data:; default-src 'self' http://121.0.0:3000/"
+		/>
 	</head>
 	<body></body>
 	<!-- <script src="./constants.js"></script> -->
@@ -9,7 +13,7 @@
 	<!-- <script src="players.js"></script> -->
 	<!-- <script src="./player.js"></script> -->
 	<script src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.js"></script>
-	<script src="/socket.io/socket.io.js"></script>
+	<!-- <script src="/socket.io/socket.io.js"></script> -->
 	<!-- <script src="./client.js" defer></script> -->
 	<script src="./dist/bundle.js" defer></script>
 	<div class="request-food">REQUEST FOOD</div>
