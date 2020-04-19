@@ -1,4 +1,5 @@
-class Player {
+import { initialPlayerPosition } from './constants';
+export default class Player {
 	constructor(position, size, id = 0, socket) {
 		this.id = id;
 		this.size = size;
@@ -6,23 +7,23 @@ class Player {
 		this.position = position;
 	}
 
-	handleKeys() {
-		if (keyIsDown(LEFT_ARROW)) {
+	handleKeys(sk, socket) {
+		if (sk.keyIsDown(sk.LEFT_ARROW)) {
 			this.position.x = this.position.x - this.speed;
 		}
-		if (keyIsDown(RIGHT_ARROW)) {
+		if (sk.keyIsDown(sk.RIGHT_ARROW)) {
 			this.position.x = this.position.x + this.speed;
 		}
-		if (keyIsDown(UP_ARROW)) {
+		if (sk.keyIsDown(sk.UP_ARROW)) {
 			this.position.y = this.position.y - this.speed;
 		}
-		if (keyIsDown(DOWN_ARROW)) {
+		if (sk.keyIsDown(sk.DOWN_ARROW)) {
 			this.position.y = this.position.y + this.speed;
 		}
 		socket.emit('player-pos-and-size', {
 			id: socket.id,
 			position: this.position,
-			size: this.size
+			size: this.size,
 		});
 	}
 
@@ -33,13 +34,13 @@ class Player {
 	updateSize(size) {
 		this.size += size;
 	}
-	draw() {
-		push();
-		fill('red');
-		translate(initialPlayerPosition.x, initialPlayerPosition.y);
-		translate(-this.position.x, -this.position.y);
-		ellipse(this.position.x, this.position.y, this.size);
-		fill('white');
-		pop();
+	draw(sk) {
+		sk.push();
+		sk.fill('red');
+		sk.translate(initialPlayerPosition.x, initialPlayerPosition.y);
+		sk.translate(-this.position.x, -this.position.y);
+		sk.ellipse(this.position.x, this.position.y, this.size);
+		sk.fill('white');
+		sk.pop();
 	}
 }

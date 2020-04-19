@@ -1,88 +1,101 @@
-function setup() {
-	socket = io();
-	frameRate(60);
-	createCanvas(800, 600);
+import PlayersConstructor from './players';
+import Food from './client-food';
+import Player from './player';
+import { initialPlayerPosition } from './constants';
 
-	player = new Player(
-		{ x: initialPlayerPosition.x, y: initialPlayerPosition.y },
-		80
-	);
+let s = (sk) => {
+	console.log(sk.translate);
+	sk.setup = () => {
+		console.log(io);
+		sk.socket = io();
+		sk.frameRate(60);
+		sk.createCanvas(800, 600);
 
-	players = PlayersConstructor();
-	console.log(players);
-	food = new Food();
+		sk.player = new Player(
+			{ x: initialPlayerPosition.x, y: initialPlayerPosition.y },
+			80
+		);
 
-	socket.on('connect', () => {
-		setTimeout(() => {
-			socket.emit('request-food');
-			socket.emit('request-players');
-		}, 500);
-	});
+		sk.players = PlayersConstructor(sk);
 
-	socket.on('request-players', () => {
-		console.log("player's position requested!");
-		socket.emit('player-pos-and-size', {
-			id: socket.id,
-			position: player.position,
-			size: player.size,
+		sk.food = new Food();
+
+		sk.socket.on('connect', () => {
+			setTimeout(() => {
+				sk.socket.emit('request-food');
+				sk.socket.emit('request-players');
+			}, 500);
 		});
-	});
 
-	socket.on('send-food', (foodFromServer) => {
-		console.log('food shape: ', foodFromServer.food);
-		food.setFood(foodFromServer.food, foodFromServer.size);
-	});
+		sk.socket.on('request-players', () => {
+			console.log("player's position requested!");
+			sk.socket.emit('player-pos-and-size', {
+				id: sk.socket.id,
+				position: player.position,
+				size: player.size,
+			});
+		});
 
-	socket.on('piece-eaten', (id) => {
-		food.deletePiece(id);
-	});
+		sk.socket.on('send-food', (foodFromServer) => {
+			console.log('food shape: ', foodFromServer.food);
+			sk.food.setFood(foodFromServer.food, foodFromServer.size);
+		});
 
-	socket.on('broadcast', (data) => {
-		players.update(data);
-	});
+		sk.socket.on('piece-eaten', (id) => {
+			sk.food.deletePiece(id);
+		});
 
-	socket.on('user-disconnected', (id) => {
-		players.remove(id);
-	});
-	document.addEventListener('visibilitychange', () => {
-		if (document.visibilityState === 'visible') {
-			socket.emit('request-players');
-		}
-	});
+		sk.socket.on('broadcast', (data) => {
+			players.update(data);
+		});
 
-	//temporary for development purposes
-	document.querySelector('.request-food').addEventListener('click', () => {
-		console.log('click');
-		socket.emit('generate-food');
-	});
-}
+		sk.socket.on('user-disconnected', (id) => {
+			players.remove(id);
+		});
+		document.addEventListener('visibilitychange', () => {
+			if (document.visibilityState === 'visible') {
+				sk.socket.emit('request-players');
+			}
+		});
 
-// TODO: make translate func reusable
-// TODO: refactor to es6
-// DO measurements to get an idea of the bandwidth used when playing
-// make player.position object consistent on both players and food
-// implement "eat player functionality"
-// zoom out when player grows
+		//temporary for development purposes
+		document.querySelector('.request-food').addEventListener('click', () => {
+			console.log('click');
+			sk.socket.emit('generate-food');
+		});
+	};
 
-function draw() {
-	// update state, state = update(state)
-	// render state, render(state)
-	background(100);
-	player.draw();
-	player.handleKeys();
-	players.draw({
-		x: player.position.x - initialPlayerPosition.x,
-		y: player.position.y - initialPlayerPosition.y,
-	});
-	food.translateFood(
-		player.position.x - initialPlayerPosition.x,
-		player.position.y - initialPlayerPosition.y
-	);
-	food.draw();
-	food.collisionDetector(
-		player.position.x,
-		player.position.y,
-		player.size,
-		player
-	);
-}
+	// TODO: make translate func reusable
+	// TODO: refactor to es6
+	// DO measurements to get an idea of the bandwidth used when playing
+	// make player.position object consistent on both players and food
+	// implement "eat player functionality"
+	// zoom out when player grows
+
+	sk.draw = () => {
+		// update state, state = update(state)
+		// render state, render(state)
+		sk.background(100);
+		sk.player.draw(sk);
+		sk.player.handleKeys(sk, sk.socket);
+		sk.players.draw({
+			x: sk.player.position.x - initialPlayerPosition.x,
+			y: sk.player.position.y - initialPlayerPosition.y,
+		});
+		sk.food.translateFood(
+			sk.player.position.x - initialPlayerPosition.x,
+			sk.player.position.y - initialPlayerPosition.y,
+			sk
+		);
+		sk.food.draw(sk);
+		sk.food.collisionDetector(
+			sk.player.position.x,
+			sk.player.position.y,
+			sk.player.size,
+			sk.player,
+			sk.socket
+		);
+	};
+};
+
+const P5 = new p5(s);

@@ -1,4 +1,4 @@
-class Food {
+export default class Food {
 	constructor(food = [], size = 10) {
 		this.food = food;
 		this.size = size;
@@ -9,7 +9,7 @@ class Food {
 		this.size = size;
 	}
 
-	collisionDetector(x, y, size, player) {
+	collisionDetector(x, y, size, player, socket) {
 		for (let id in this.food) {
 			let piece = this.food[id];
 
@@ -28,16 +28,16 @@ class Food {
 		delete this.food[id];
 	}
 
-	translateFood(x, y) {
+	translateFood(x, y, sk) {
 		this.translateVector.x = -x;
 		this.translateVector.y = -y;
-		translate(this.translateVector.x, this.translateVector.y);
+		sk.translate(this.translateVector.x, this.translateVector.y);
 	}
 
-	draw() {
+	draw(sk) {
 		for (let item in this.food) {
 			let piece = this.food[item];
-			ellipse(piece.x, piece.y, this.size);
+			sk.ellipse(piece.x, piece.y, this.size);
 		}
 	}
 }
