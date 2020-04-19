@@ -1,0 +1,24 @@
+{
+	"name": "agario-clone",
+	"version": "1.0.0",
+	"description": "browser multiplayer game based on websockets",
+	"main": "sockets-service.js",
+	"scripts": {
+		"start": "nodemon sockets-service.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/NgDan/agario-clone.git"
+	},
+	"author": "Dan N",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/NgDan/agario-clone/issues"
+	},
+	"homepage": "https://github.com/NgDan/agario-clone#readme",
+	"devDependencies": {
+		"webpack": "^4.42.1",
+		"webpack-cli": "^3.3.11"
+	}
+}
