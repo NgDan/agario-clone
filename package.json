@@ -3,11 +3,11 @@
 	"version": "1.0.0",
 	"description": "browser multiplayer game based on websockets",
 	"main": "sockets-service.js",
-	"type": "module",
 	"scripts": {
-		"start": "cd src/server && nodemon sockets-service.js",
+		"start": "cd src/server && nodemon sockets-service.mjs",
+		"start:experimental": "cd src/server && node --experimental-modules sockets-service.mjs",
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "npx webpack --watch"
+		"build:watch": "npx webpack --watch"
 	},
 	"repository": {
 		"type": "git",

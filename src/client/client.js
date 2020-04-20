@@ -2,9 +2,9 @@ import PlayersConstructor from './players';
 import Food from './client-food';
 import Player from './player';
 import { initialPlayerPosition } from './constants';
+import io from 'socket.io-client';
 
 let s = (sk) => {
-	console.log(sk.translate);
 	sk.setup = () => {
 		console.log(io);
 		sk.socket = io();

@@ -3,7 +3,7 @@ import http from 'http';
 // let http = require('http').createServer(app);
 import socketio from 'socket.io';
 // let io = require('socket.io')(http);
-import Food from './server-food.js';
+import Food from './server-food.mjs';
 let app = express();
 let httpServer = http.createServer(app);
 let io = socketio(httpServer);
