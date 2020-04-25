@@ -102,7 +102,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-let s = (sk) => {
+let s = sk => {
 	sk.setup = () => {
 		sk.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_4___default()();
 		sk.frameRate(60);
@@ -135,21 +135,21 @@ let s = (sk) => {
 			});
 		});
 
-		sk.socket.on('send-food', (foodFromServer) => {
+		sk.socket.on('send-food', foodFromServer => {
 			sk.food.setFood(foodFromServer.food, foodFromServer.size);
 		});
 
-		sk.socket.on('piece-eaten', (id) => {
+		sk.socket.on('piece-eaten', id => {
 			sk.food.deletePiece(id);
 		});
 
-		sk.socket.on('broadcast', (data) => {
+		sk.socket.on('broadcast', data => {
 			console.log('players before update', sk.players);
 			console.log('update data: ', data);
 			sk.players.update(data);
 		});
 
-		sk.socket.on('user-disconnected', (id) => {
+		sk.socket.on('user-disconnected', id => {
 			sk.players.remove(id);
 		});
 		document.addEventListener('visibilitychange', () => {
@@ -221,7 +221,7 @@ function PlayersConstructor(sk) {
 	});
 }
 
-let updater = (state) => {
+let updater = state => {
 	console.log('state.players: ', state.players);
 	return {
 		update: ({ id, position, size }) => {
@@ -234,15 +234,15 @@ let updater = (state) => {
 		},
 	};
 };
-let remover = (state) => ({
-	remove: (id) => {
+let remover = state => ({
+	remove: id => {
 		delete state.players[id];
 	},
 });
 
 //TODO remove push, translate, ellipse, pop or find a way to
 let drawer = (state, push, translate, ellipse, pop, sk) => ({
-	draw: (translateVector) => {
+	draw: translateVector => {
 		state.translateVector.x = -translateVector.x;
 		state.translateVector.y = -translateVector.y;
 		if (Object.entries(state.players).length > 0) {

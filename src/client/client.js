@@ -4,7 +4,7 @@ import Player from './player';
 import { initialPlayerPosition } from './constants';
 import io from 'socket.io-client';
 
-let s = (sk) => {
+let s = sk => {
 	sk.setup = () => {
 		sk.socket = io();
 		sk.frameRate(60);
@@ -37,21 +37,21 @@ let s = (sk) => {
 			});
 		});
 
-		sk.socket.on('send-food', (foodFromServer) => {
+		sk.socket.on('send-food', foodFromServer => {
 			sk.food.setFood(foodFromServer.food, foodFromServer.size);
 		});
 
-		sk.socket.on('piece-eaten', (id) => {
+		sk.socket.on('piece-eaten', id => {
 			sk.food.deletePiece(id);
 		});
 
-		sk.socket.on('broadcast', (data) => {
+		sk.socket.on('broadcast', data => {
 			console.log('players before update', sk.players);
 			console.log('update data: ', data);
 			sk.players.update(data);
 		});
 
-		sk.socket.on('user-disconnected', (id) => {
+		sk.socket.on('user-disconnected', id => {
 			sk.players.remove(id);
 		});
 		document.addEventListener('visibilitychange', () => {
