@@ -6,7 +6,6 @@ import io from 'socket.io-client';
 
 let s = (sk) => {
 	sk.setup = () => {
-		console.log(io);
 		sk.socket = io();
 		sk.frameRate(60);
 		sk.createCanvas(800, 600);
@@ -17,6 +16,8 @@ let s = (sk) => {
 		);
 
 		sk.players = PlayersConstructor(sk);
+
+		console.log('players: ', sk.players);
 
 		sk.food = new Food();
 
@@ -31,13 +32,12 @@ let s = (sk) => {
 			console.log("player's position requested!");
 			sk.socket.emit('player-pos-and-size', {
 				id: sk.socket.id,
-				position: player.position,
-				size: player.size,
+				position: sk.player.position,
+				size: sk.player.size,
 			});
 		});
 
 		sk.socket.on('send-food', (foodFromServer) => {
-			console.log('food shape: ', foodFromServer.food);
 			sk.food.setFood(foodFromServer.food, foodFromServer.size);
 		});
 
@@ -46,11 +46,13 @@ let s = (sk) => {
 		});
 
 		sk.socket.on('broadcast', (data) => {
-			players.update(data);
+			console.log('players before update', sk.players);
+			console.log('update data: ', data);
+			sk.players.update(data);
 		});
 
 		sk.socket.on('user-disconnected', (id) => {
-			players.remove(id);
+			sk.players.remove(id);
 		});
 		document.addEventListener('visibilitychange', () => {
 			if (document.visibilityState === 'visible') {

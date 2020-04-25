@@ -104,7 +104,6 @@ __webpack_require__.r(__webpack_exports__);
 
 let s = (sk) => {
 	sk.setup = () => {
-		console.log(socket_io_client__WEBPACK_IMPORTED_MODULE_4___default.a);
 		sk.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_4___default()();
 		sk.frameRate(60);
 		sk.createCanvas(800, 600);
@@ -115,6 +114,8 @@ let s = (sk) => {
 		);
 
 		sk.players = Object(_players__WEBPACK_IMPORTED_MODULE_0__["default"])(sk);
+
+		console.log('players: ', sk.players);
 
 		sk.food = new _client_food__WEBPACK_IMPORTED_MODULE_1__["default"]();
 
@@ -129,13 +130,12 @@ let s = (sk) => {
 			console.log("player's position requested!");
 			sk.socket.emit('player-pos-and-size', {
 				id: sk.socket.id,
-				position: player.position,
-				size: player.size,
+				position: sk.player.position,
+				size: sk.player.size,
 			});
 		});
 
 		sk.socket.on('send-food', (foodFromServer) => {
-			console.log('food shape: ', foodFromServer.food);
 			sk.food.setFood(foodFromServer.food, foodFromServer.size);
 		});
 
@@ -144,11 +144,13 @@ let s = (sk) => {
 		});
 
 		sk.socket.on('broadcast', (data) => {
-			players.update(data);
+			console.log('players before update', sk.players);
+			console.log('update data: ', data);
+			sk.players.update(data);
 		});
 
 		sk.socket.on('user-disconnected', (id) => {
-			players.remove(id);
+			sk.players.remove(id);
 		});
 		document.addEventListener('visibilitychange', () => {
 			if (document.visibilityState === 'visible') {
@@ -215,39 +217,44 @@ function PlayersConstructor(sk) {
 		playersState,
 		...updater(playersState),
 		...remover(playersState),
-		...drawer(playersState, sk.push, sk.translate, sk.ellipse, sk.pop),
+		...drawer(playersState, sk.push, sk.translate, sk.ellipse, sk.pop, sk),
 	});
 }
 
-let updater = (state) => ({
-	update: ({ id, position, size }) => {
-		if (position) {
-			state.players[id] = { ...state.players[id], position: position };
-		}
-		if (size) {
-			state.players[id] = { ...state.players[id], size: size };
-		}
-	},
-});
+let updater = (state) => {
+	console.log('state.players: ', state.players);
+	return {
+		update: ({ id, position, size }) => {
+			if (position) {
+				state.players[id] = { ...state.players[id], position: position };
+			}
+			if (size) {
+				state.players[id] = { ...state.players[id], size: size };
+			}
+		},
+	};
+};
 let remover = (state) => ({
 	remove: (id) => {
 		delete state.players[id];
 	},
 });
-let drawer = (state, push, translate, ellipse, pop) => ({
+
+//TODO remove push, translate, ellipse, pop or find a way to
+let drawer = (state, push, translate, ellipse, pop, sk) => ({
 	draw: (translateVector) => {
 		state.translateVector.x = -translateVector.x;
 		state.translateVector.y = -translateVector.y;
 		if (Object.entries(state.players).length > 0) {
 			for (const player of Object.keys(state.players)) {
-				push();
-				translate(state.translateVector.x, state.translateVector.y);
-				ellipse(
+				sk.push();
+				sk.translate(state.translateVector.x, state.translateVector.y);
+				sk.ellipse(
 					state.players[player].position.x,
 					state.players[player].position.y,
 					state.players[player].size
 				);
-				pop();
+				sk.pop();
 			}
 		}
 	},
