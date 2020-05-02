@@ -7,7 +7,7 @@ export default function PlayersConstructor(sk) {
 		playersState,
 		...updater(playersState),
 		...remover(playersState),
-		...drawer(playersState, sk.push, sk.translate, sk.ellipse, sk.pop, sk),
+		...drawer(playersState, sk),
 	});
 }
 
@@ -31,7 +31,7 @@ let remover = state => ({
 });
 
 //TODO remove push, translate, ellipse, pop or find a way to
-let drawer = (state, push, translate, ellipse, pop, sk) => ({
+let drawer = (state, sk) => ({
 	draw: translateVector => {
 		state.translateVector.x = -translateVector.x;
 		state.translateVector.y = -translateVector.y;

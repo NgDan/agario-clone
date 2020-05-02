@@ -5,7 +5,7 @@ import { initialPlayerPosition } from './constants';
 import io from 'socket.io-client';
 
 let s = sk => {
-	sk.setup = () => {
+	const setup = () => {
 		sk.socket = io();
 		sk.frameRate(60);
 		sk.createCanvas(800, 600);
@@ -16,8 +16,6 @@ let s = sk => {
 		);
 
 		sk.players = PlayersConstructor(sk);
-
-		console.log('players: ', sk.players);
 
 		sk.food = new Food();
 
@@ -68,15 +66,12 @@ let s = sk => {
 	};
 
 	// TODO: make translate func reusable
-	// TODO: refactor to es6
 	// DO measurements to get an idea of the bandwidth used when playing
 	// make player.position object consistent on both players and food
 	// implement "eat player functionality"
 	// zoom out when player grows
 
-	sk.draw = () => {
-		// update state, state = update(state)
-		// render state, render(state)
+	const draw = () => {
 		sk.background(100);
 		sk.player.draw(sk);
 		sk.player.handleKeys(sk, sk.socket);
@@ -98,6 +93,8 @@ let s = sk => {
 			sk.socket
 		);
 	};
+	sk.setup = setup;
+	sk.draw = draw;
 };
 
 const P5 = new p5(s);
