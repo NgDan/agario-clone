@@ -4,6 +4,7 @@ export default class Food {
 		this.size = size;
 		this.translateVector = { x: 0, y: 0 };
 	}
+
 	setFood(food, size) {
 		this.food = food;
 		this.size = size;
