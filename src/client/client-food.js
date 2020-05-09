@@ -1,5 +1,5 @@
 import { set } from 'lodash';
-console.log(set);
+
 export default class Food {
 	constructor(food = [], size = 10) {
 		this.food = food;
@@ -29,7 +29,6 @@ export default class Food {
 	}
 
 	deletePiece(id) {
-		// this.food[id].active = false;
 		set(this, `food[${[id]}].active`, false);
 	}
 

@@ -36,6 +36,7 @@ let s = sk => {
 		});
 
 		sk.socket.on('send-food', foodFromServer => {
+			console.log(foodFromServer.food);
 			sk.food.setFood(foodFromServer.food, foodFromServer.size);
 		});
 

@@ -6,14 +6,16 @@ import http from 'http';
 // let http = require('http').createServer(app);
 import socketio from 'socket.io';
 // let io = require('socket.io')(http);
-import Food from './server-food.mjs';
+import { FoodFactory } from './server-food.mjs';
+
 let app = express();
 let httpServer = http.createServer(app);
 let io = socketio(httpServer);
 
 app.use(express.static('../client'));
 
-let food = new Food({ x: 800, y: 600 }, 10);
+// let food = new Food({ x: 800, y: 600 }, 10);
+let food = FoodFactory({ x: 800, y: 600 }, 10);
 
 food.generate(200);
 
@@ -23,8 +25,8 @@ io.on('connection', socket => {
 	});
 
 	socket.on('request-food', () => {
-		socket.emit('send-food', food);
-		socket.broadcast.emit('send-food', food);
+		socket.emit('send-food', food.state);
+		socket.broadcast.emit('send-food', food.state);
 	});
 
 	socket.on('request-players', () => {
