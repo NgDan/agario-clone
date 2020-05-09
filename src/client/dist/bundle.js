@@ -115,7 +115,7 @@ let s = sk => {
 
 		sk.players = Object(_players__WEBPACK_IMPORTED_MODULE_0__["default"])(sk);
 
-		sk.food = new _client_food__WEBPACK_IMPORTED_MODULE_1__["default"]();
+		sk.food = Object(_client_food__WEBPACK_IMPORTED_MODULE_1__["FoodFactory"])();
 
 		sk.socket.on('connect', () => {
 			setTimeout(() => {
@@ -265,58 +265,77 @@ let drawer = (state, sk) => ({
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Food; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FoodFactory", function() { return FoodFactory; });
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
 
 
-class Food {
-	constructor(food = [], size = 10) {
-		this.food = food;
-		this.size = size;
-		this.translateVector = { x: 0, y: 0 };
-	}
+const FoodFactory = (size = 10) => {
+	const state = {
+		food: [],
+		size: size,
+		translateVector: { x: 0, y: 0 },
+	};
+	const foodSetter = state => ({
+		setFood: (food, size) => {
+			state.food = food;
+			state.size = size;
+		},
+	});
+	let deleter = state => ({
+		deletePiece: id => {
+			Object(lodash__WEBPACK_IMPORTED_MODULE_0__["set"])(state, `food[${[id]}].active`, false);
+		},
+	});
 
-	setFood(food, size) {
-		this.food = food;
-		this.size = size;
-	}
+	let translater = state => ({
+		translateFood: (x, y, sk) => {
+			state.translateVector.x = -x;
+			state.translateVector.y = -y;
+			sk.translate(state.translateVector.x, state.translateVector.y);
+		},
+	});
 
-	collisionDetector(x, y, size, player, socket) {
-		for (let id in this.food) {
-			let piece = this.food[id];
+	let createCollisionDetector = state => ({
+		collisionDetector: (x, y, size, player, socket) => {
+			for (let id in state.food) {
+				let piece = state.food[id];
 
-			if (
-				Math.pow(x - piece.x, 2) + Math.pow(y - piece.y, 2) <
-					Math.pow(size / 2 + this.size / 2, 2) &&
-				this.food[id].active
-			) {
-				socket.emit('piece-eaten', id);
-				this.food[id].active = false;
-				player.updateSize(1);
+				if (
+					Math.pow(x - piece.x, 2) + Math.pow(y - piece.y, 2) <
+						Math.pow(size / 2 + state.size / 2, 2) &&
+					state.food[id].active
+				) {
+					socket.emit('piece-eaten', id);
+					state.food[id].active = false;
+					player.updateSize(1);
+				}
 			}
-		}
-	}
+		},
+	});
 
-	deletePiece(id) {
-		Object(lodash__WEBPACK_IMPORTED_MODULE_0__["set"])(this, `food[${[id]}].active`, false);
-	}
-
-	translateFood(x, y, sk) {
-		this.translateVector.x = -x;
-		this.translateVector.y = -y;
-		sk.translate(this.translateVector.x, this.translateVector.y);
-	}
-
-	draw(sk) {
-		for (let item in this.food) {
-			let piece = this.food[item];
-			if (this.food[item].active) {
-				sk.ellipse(piece.x, piece.y, this.size);
+	let drawer = state => ({
+		draw: sk => {
+			for (let item in state.food) {
+				let piece = state.food[item];
+				if (state.food[item].active) {
+					sk.ellipse(piece.x, piece.y, state.size);
+				}
 			}
-		}
-	}
-}
+		},
+	});
+
+	return Object.freeze({
+		state,
+		...foodSetter(state),
+		...deleter(state),
+		...translater(state),
+		...createCollisionDetector(state),
+		...drawer(state),
+	});
+};
+
+
 
 
 /***/ }),

@@ -3,9 +3,7 @@
 
 import express from 'express';
 import http from 'http';
-// let http = require('http').createServer(app);
 import socketio from 'socket.io';
-// let io = require('socket.io')(http);
 import { FoodFactory } from './server-food.mjs';
 
 let app = express();
@@ -14,7 +12,6 @@ let io = socketio(httpServer);
 
 app.use(express.static('../client'));
 
-// let food = new Food({ x: 800, y: 600 }, 10);
 let food = FoodFactory({ x: 800, y: 600 }, 10);
 
 food.generate(200);
@@ -40,7 +37,6 @@ io.on('connection', socket => {
 
 	socket.on('disconnect', () => {
 		socket.broadcast.emit('user-disconnected', socket.id);
-		// console.log("user disconnected", socket);
 	});
 
 	socket.on('piece-eaten', id => {

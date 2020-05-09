@@ -1,5 +1,5 @@
 import PlayersConstructor from './players';
-import Food from './client-food';
+import { FoodFactory } from './client-food';
 import Player from './player';
 import { initialPlayerPosition } from './constants';
 import io from 'socket.io-client';
@@ -17,7 +17,7 @@ let s = sk => {
 
 		sk.players = PlayersConstructor(sk);
 
-		sk.food = new Food();
+		sk.food = FoodFactory();
 
 		sk.socket.on('connect', () => {
 			setTimeout(() => {
