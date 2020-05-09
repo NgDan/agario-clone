@@ -1,3 +1,5 @@
+import { set } from 'lodash';
+console.log(set);
 export default class Food {
 	constructor(food = [], size = 10) {
 		this.food = food;
@@ -16,17 +18,19 @@ export default class Food {
 
 			if (
 				Math.pow(x - piece.x, 2) + Math.pow(y - piece.y, 2) <
-				Math.pow(size / 2 + this.size / 2, 2)
+					Math.pow(size / 2 + this.size / 2, 2) &&
+				this.food[id].active
 			) {
 				socket.emit('piece-eaten', id);
-				delete this.food[id];
+				this.food[id].active = false;
 				player.updateSize(1);
 			}
 		}
 	}
 
 	deletePiece(id) {
-		delete this.food[id];
+		// this.food[id].active = false;
+		set(this, `food[${[id]}].active`, false);
 	}
 
 	translateFood(x, y, sk) {
@@ -38,7 +42,9 @@ export default class Food {
 	draw(sk) {
 		for (let item in this.food) {
 			let piece = this.food[item];
-			sk.ellipse(piece.x, piece.y, this.size);
+			if (this.food[item].active) {
+				sk.ellipse(piece.x, piece.y, this.size);
+			}
 		}
 	}
 }

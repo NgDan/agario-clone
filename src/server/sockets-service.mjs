@@ -1,3 +1,6 @@
+// require = require('esm')(module);
+// module.exports = require('./sockets-service.js');
+
 import express from 'express';
 import http from 'http';
 // let http = require('http').createServer(app);

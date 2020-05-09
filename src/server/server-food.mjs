@@ -1,3 +1,5 @@
+import set from 'lodash';
+
 class Food {
 	constructor(canvasDimensions, size) {
 		this.food = {};
@@ -10,11 +12,11 @@ class Food {
 			let y = Math.floor(Math.random() * this.canvasDimensions.y);
 			let id = '' + x + y;
 
-			this.food[id] = { x: x, y: y };
+			this.food[id] = { x: x, y: y, active: true };
 		}
 	}
 	deletePiece(id) {
-		delete this.food[id];
+		set(this, `food[${[id]}].active`, false);
 	}
 }
 

@@ -2,10 +2,9 @@
 	"name": "agario-clone",
 	"version": "1.0.0",
 	"description": "browser multiplayer game based on websockets",
-	"main": "sockets-service.js",
+	"main": "src/server/sockets-service.mjs",
 	"scripts": {
-		"start": "cd src/server && nodemon sockets-service.mjs",
-		"start:experimental": "cd src/server && node --experimental-modules sockets-service.mjs",
+		"start": "cd src/server && node -r esm sockets-service.mjs",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build:watch": "npx webpack --watch"
 	},
@@ -27,5 +26,7 @@
 		"webpack": "^4.42.1",
 		"webpack-cli": "^3.3.11"
 	},
-	"dependencies": {}
+	"dependencies": {
+		"esm": "^3.2.25"
+	}
 }
