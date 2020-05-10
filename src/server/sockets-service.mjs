@@ -27,7 +27,6 @@ io.on('connection', socket => {
 	});
 
 	socket.on('request-players', () => {
-		console.log('players requested!');
 		socket.broadcast.emit('request-players');
 	});
 
@@ -47,6 +46,12 @@ io.on('connection', socket => {
 
 	socket.on('generate-food', data => {
 		food.generate(200);
+		socket.emit('send-food', food);
+		socket.broadcast.emit('send-food', food);
+	});
+
+	socket.on('reset-food', data => {
+		food.resetFood();
 		socket.emit('send-food', food);
 		socket.broadcast.emit('send-food', food);
 	});

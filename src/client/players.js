@@ -11,7 +11,7 @@ export default function PlayersConstructor(sk) {
 	});
 }
 
-let updater = state => {
+const updater = state => {
 	console.log('state.players: ', state.players);
 	return {
 		update: ({ id, position, size }) => {
@@ -24,14 +24,13 @@ let updater = state => {
 		},
 	};
 };
-let remover = state => ({
+const remover = state => ({
 	remove: id => {
 		delete state.players[id];
 	},
 });
 
-//TODO remove push, translate, ellipse, pop or find a way to
-let drawer = (state, sk) => ({
+const drawer = (state, sk) => ({
 	draw: translateVector => {
 		state.translateVector.x = -translateVector.x;
 		state.translateVector.y = -translateVector.y;

@@ -1,24 +1,24 @@
 import { set } from 'lodash';
 
-const FoodFactory = (size = 10) => {
+const FoodFactory = (foodSize = 10) => {
 	const state = {
 		food: [],
-		size: size,
+		foodSize: foodSize,
 		translateVector: { x: 0, y: 0 },
 	};
 	const foodSetter = state => ({
-		setFood: (food, size) => {
+		setFood: (food, foodSize) => {
 			state.food = food;
-			state.size = size;
+			state.foodSize = foodSize;
 		},
 	});
-	let deleter = state => ({
+	const deleter = state => ({
 		deletePiece: id => {
 			set(state, `food[${[id]}].active`, false);
 		},
 	});
 
-	let translater = state => ({
+	const translater = state => ({
 		translateFood: (x, y, sk) => {
 			state.translateVector.x = -x;
 			state.translateVector.y = -y;
@@ -26,14 +26,14 @@ const FoodFactory = (size = 10) => {
 		},
 	});
 
-	let createCollisionDetector = state => ({
+	const createCollisionDetector = state => ({
 		collisionDetector: (x, y, size, player, socket) => {
 			for (let id in state.food) {
 				let piece = state.food[id];
 
 				if (
 					Math.pow(x - piece.x, 2) + Math.pow(y - piece.y, 2) <
-						Math.pow(size / 2 + state.size / 2, 2) &&
+						Math.pow(size / 2 + state.foodSize / 2, 2) &&
 					state.food[id].active
 				) {
 					socket.emit('piece-eaten', id);
@@ -44,12 +44,12 @@ const FoodFactory = (size = 10) => {
 		},
 	});
 
-	let drawer = state => ({
+	const drawer = state => ({
 		draw: sk => {
 			for (let item in state.food) {
 				let piece = state.food[item];
 				if (state.food[item].active) {
-					sk.ellipse(piece.x, piece.y, state.size);
+					sk.ellipse(piece.x, piece.y, state.foodSize);
 				}
 			}
 		},

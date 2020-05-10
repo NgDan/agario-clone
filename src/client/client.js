@@ -27,7 +27,6 @@ let s = sk => {
 		});
 
 		sk.socket.on('request-players', () => {
-			console.log("player's position requested!");
 			sk.socket.emit('player-pos-and-size', {
 				id: sk.socket.id,
 				position: sk.player.position,
@@ -36,8 +35,7 @@ let s = sk => {
 		});
 
 		sk.socket.on('send-food', foodFromServer => {
-			console.log(foodFromServer.food);
-			sk.food.setFood(foodFromServer.food, foodFromServer.size);
+			sk.food.setFood(foodFromServer.state.food, foodFromServer.state.foodSize);
 		});
 
 		sk.socket.on('piece-eaten', id => {
@@ -45,8 +43,6 @@ let s = sk => {
 		});
 
 		sk.socket.on('broadcast', data => {
-			console.log('players before update', sk.players);
-			console.log('update data: ', data);
 			sk.players.update(data);
 		});
 
@@ -61,8 +57,7 @@ let s = sk => {
 
 		//temporary for development purposes
 		document.querySelector('.request-food').addEventListener('click', () => {
-			console.log('click');
-			sk.socket.emit('generate-food');
+			sk.socket.emit('reset-food');
 		});
 	};
 

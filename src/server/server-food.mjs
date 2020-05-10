@@ -1,12 +1,13 @@
 import set from 'lodash';
 
-const FoodFactory = (canvasDimensions, size) => {
-	let state = {
+const FoodFactory = (canvasDimensions, foodSize) => {
+	const state = {
 		food: {},
-		size: size,
+		foodSize: foodSize,
 		canvasDimensions: canvasDimensions,
 	};
-	let generator = state => ({
+
+	const generator = state => ({
 		generate: numberOfPieces => {
 			for (let i = 0; i < numberOfPieces; i++) {
 				let x = Math.floor(Math.random() * state.canvasDimensions.x);
@@ -17,9 +18,19 @@ const FoodFactory = (canvasDimensions, size) => {
 			}
 		},
 	});
-	let deleter = state => ({
+
+	const deleter = state => ({
 		deletePiece: id => {
 			set(state, `food[${[id]}].active`, false);
+		},
+	});
+
+	const resetter = state => ({
+		resetFood: () => {
+			let food = state.food;
+			for (const id in food) {
+				set(state, `food[${[id]}].active`, true);
+			}
 		},
 	});
 
@@ -27,6 +38,7 @@ const FoodFactory = (canvasDimensions, size) => {
 		state,
 		...generator(state),
 		...deleter(state),
+		...resetter(state),
 	});
 };
 
