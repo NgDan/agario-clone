@@ -1,6 +1,6 @@
 import PlayersConstructor from './players';
 import { FoodFactory } from './client-food';
-import Player from './player';
+import PlayerFactory from './player';
 import { initialPlayerPosition } from './constants';
 import io from 'socket.io-client';
 
@@ -10,11 +10,10 @@ let s = sk => {
 		sk.frameRate(60);
 		sk.createCanvas(800, 600);
 
-		sk.player = new Player(
+		sk.player = PlayerFactory(
 			{ x: initialPlayerPosition.x, y: initialPlayerPosition.y },
 			80
 		);
-
 		sk.players = PlayersConstructor(sk);
 
 		sk.food = FoodFactory();
@@ -72,19 +71,19 @@ let s = sk => {
 		sk.player.draw(sk);
 		sk.player.handleKeys(sk, sk.socket);
 		sk.players.draw({
-			x: sk.player.position.x - initialPlayerPosition.x,
-			y: sk.player.position.y - initialPlayerPosition.y,
+			x: sk.player.state.position.x - initialPlayerPosition.x,
+			y: sk.player.state.position.y - initialPlayerPosition.y,
 		});
 		sk.food.translateFood(
-			sk.player.position.x - initialPlayerPosition.x,
-			sk.player.position.y - initialPlayerPosition.y,
+			sk.player.state.position.x - initialPlayerPosition.x,
+			sk.player.state.position.y - initialPlayerPosition.y,
 			sk
 		);
 		sk.food.draw(sk);
 		sk.food.collisionDetector(
-			sk.player.position.x,
-			sk.player.position.y,
-			sk.player.size,
+			sk.player.state.position.x,
+			sk.player.state.position.y,
+			sk.player.state.size,
 			sk.player,
 			sk.socket
 		);

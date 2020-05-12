@@ -108,11 +108,14 @@ let s = sk => {
 		sk.frameRate(60);
 		sk.createCanvas(800, 600);
 
-		sk.player = new _player__WEBPACK_IMPORTED_MODULE_2__["default"](
+		// sk.player = new Player(
+		// 	{ x: initialPlayerPosition.x, y: initialPlayerPosition.y },
+		// 	80
+		// );
+		sk.player = Object(_player__WEBPACK_IMPORTED_MODULE_2__["default"])(
 			{ x: _constants__WEBPACK_IMPORTED_MODULE_3__["initialPlayerPosition"].x, y: _constants__WEBPACK_IMPORTED_MODULE_3__["initialPlayerPosition"].y },
 			80
 		);
-
 		sk.players = Object(_players__WEBPACK_IMPORTED_MODULE_0__["default"])(sk);
 
 		sk.food = Object(_client_food__WEBPACK_IMPORTED_MODULE_1__["FoodFactory"])();
@@ -170,19 +173,19 @@ let s = sk => {
 		sk.player.draw(sk);
 		sk.player.handleKeys(sk, sk.socket);
 		sk.players.draw({
-			x: sk.player.position.x - _constants__WEBPACK_IMPORTED_MODULE_3__["initialPlayerPosition"].x,
-			y: sk.player.position.y - _constants__WEBPACK_IMPORTED_MODULE_3__["initialPlayerPosition"].y,
+			x: sk.player.state.position.x - _constants__WEBPACK_IMPORTED_MODULE_3__["initialPlayerPosition"].x,
+			y: sk.player.state.position.y - _constants__WEBPACK_IMPORTED_MODULE_3__["initialPlayerPosition"].y,
 		});
 		sk.food.translateFood(
-			sk.player.position.x - _constants__WEBPACK_IMPORTED_MODULE_3__["initialPlayerPosition"].x,
-			sk.player.position.y - _constants__WEBPACK_IMPORTED_MODULE_3__["initialPlayerPosition"].y,
+			sk.player.state.position.x - _constants__WEBPACK_IMPORTED_MODULE_3__["initialPlayerPosition"].x,
+			sk.player.state.position.y - _constants__WEBPACK_IMPORTED_MODULE_3__["initialPlayerPosition"].y,
 			sk
 		);
 		sk.food.draw(sk);
 		sk.food.collisionDetector(
-			sk.player.position.x,
-			sk.player.position.y,
-			sk.player.size,
+			sk.player.state.position.x,
+			sk.player.state.position.y,
+			sk.player.state.size,
 			sk.player,
 			sk.socket
 		);
@@ -17503,57 +17506,57 @@ module.exports = function(module) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Player; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PlayerFactory; });
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
 
-class Player {
-	constructor(position, size, id = 0, socket) {
-		this.id = id;
-		this.size = size;
-		this.speed = 2;
-		this.position = position;
-	}
+// export default class Player {
+// 	constructor(position, size, id = 0, socket) {
+// 		this.id = id;
+// 		this.size = size;
+// 		this.speed = 2;
+// 		this.position = position;
+// 	}
 
-	handleKeys(sk, socket) {
-		if (sk.keyIsDown(sk.LEFT_ARROW)) {
-			this.position.x = this.position.x - this.speed;
-		}
-		if (sk.keyIsDown(sk.RIGHT_ARROW)) {
-			this.position.x = this.position.x + this.speed;
-		}
-		if (sk.keyIsDown(sk.UP_ARROW)) {
-			this.position.y = this.position.y - this.speed;
-		}
-		if (sk.keyIsDown(sk.DOWN_ARROW)) {
-			this.position.y = this.position.y + this.speed;
-		}
-		socket.emit('player-pos-and-size', {
-			id: socket.id,
-			position: this.position,
-			size: this.size,
-		});
-	}
+// 	handleKeys(sk, socket) {
+// 		if (sk.keyIsDown(sk.LEFT_ARROW)) {
+// 			this.position.x = this.position.x - this.speed;
+// 		}
+// 		if (sk.keyIsDown(sk.RIGHT_ARROW)) {
+// 			this.position.x = this.position.x + this.speed;
+// 		}
+// 		if (sk.keyIsDown(sk.UP_ARROW)) {
+// 			this.position.y = this.position.y - this.speed;
+// 		}
+// 		if (sk.keyIsDown(sk.DOWN_ARROW)) {
+// 			this.position.y = this.position.y + this.speed;
+// 		}
+// 		socket.emit('player-pos-and-size', {
+// 			id: socket.id,
+// 			position: this.position,
+// 			size: this.size,
+// 		});
+// 	}
 
-	updatePosition(position) {
-		this.position = position;
-	}
+// 	updatePosition(position) {
+// 		this.position = position;
+// 	}
 
-	updateSize(size) {
-		this.size += size;
-	}
+// 	updateSize(size) {
+// 		this.size += size;
+// 	}
 
-	draw(sk) {
-		sk.push();
-		sk.fill('red');
-		sk.translate(_constants__WEBPACK_IMPORTED_MODULE_0__["initialPlayerPosition"].x, _constants__WEBPACK_IMPORTED_MODULE_0__["initialPlayerPosition"].y);
-		sk.translate(-this.position.x, -this.position.y);
-		sk.ellipse(this.position.x, this.position.y, this.size);
-		sk.fill('white');
-		sk.pop();
-	}
-}
+// 	draw(sk) {
+// 		sk.push();
+// 		sk.fill('red');
+// 		sk.translate(initialPlayerPosition.x, initialPlayerPosition.y);
+// 		sk.translate(-this.position.x, -this.position.y);
+// 		sk.ellipse(this.position.x, this.position.y, this.size);
+// 		sk.fill('white');
+// 		sk.pop();
+// 	}
+// }
 
-const PlayerFactory = (position, size, id = 0) => {
+function PlayerFactory(position, size, id = 0) {
 	let state = {
 		id: id,
 		size: size,
@@ -17594,7 +17597,27 @@ const PlayerFactory = (position, size, id = 0) => {
 			state.size += size;
 		},
 	});
-};
+
+	const drawer = state => ({
+		draw: sk => {
+			sk.push();
+			sk.fill('red');
+			sk.translate(_constants__WEBPACK_IMPORTED_MODULE_0__["initialPlayerPosition"].x, _constants__WEBPACK_IMPORTED_MODULE_0__["initialPlayerPosition"].y);
+			sk.translate(-state.position.x, -state.position.y);
+			sk.ellipse(state.position.x, state.position.y, state.size);
+			sk.fill('white');
+			sk.pop();
+		},
+	});
+
+	return Object.freeze({
+		state,
+		...keyHandler(state),
+		...positionUpdater(state),
+		...sizeUpdater(state),
+		...drawer(state),
+	});
+}
 
 
 /***/ }),
