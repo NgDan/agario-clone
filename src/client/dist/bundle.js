@@ -133,7 +133,7 @@ let s = sk => {
 		});
 
 		sk.socket.on('send-food', foodFromServer => {
-			sk.food.setFood(foodFromServer.state.food, foodFromServer.state.foodSize);
+			sk.food.setFood(foodFromServer.food, foodFromServer.foodSize);
 		});
 
 		sk.socket.on('piece-eaten', id => {

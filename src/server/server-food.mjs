@@ -13,7 +13,8 @@ const FoodFactory = (canvasDimensions, foodSize) => {
 				let x = Math.floor(Math.random() * state.canvasDimensions.x);
 				let y = Math.floor(Math.random() * state.canvasDimensions.y);
 				let id = '' + x + y;
-
+				console.log('debug');
+				// set(state, `food[${[id]}]`, { x: x, y: y, active: true });
 				state.food[id] = { x: x, y: y, active: true };
 			}
 		},
