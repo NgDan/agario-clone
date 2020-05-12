@@ -17541,6 +17541,7 @@ class Player {
 	updateSize(size) {
 		this.size += size;
 	}
+
 	draw(sk) {
 		sk.push();
 		sk.fill('red');
@@ -17551,6 +17552,15 @@ class Player {
 		sk.pop();
 	}
 }
+
+const PlayerFactory = (position, size) => {
+	let state = {
+		id: id,
+		size: size,
+		speed: 2,
+		position: position,
+	};
+};
 
 
 /***/ }),
