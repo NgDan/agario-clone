@@ -46,11 +46,45 @@ export default class Player {
 	}
 }
 
-const PlayerFactory = (position, size) => {
+const PlayerFactory = (position, size, id = 0) => {
 	let state = {
 		id: id,
 		size: size,
 		speed: 2,
 		position: position,
 	};
+
+	const keyHandler = state => ({
+		handleKeys: (sk, socket) => {
+			if (sk.keyIsDown(sk.LEFT_ARROW)) {
+				state.position.x = state.position.x - state.speed;
+			}
+			if (sk.keyIsDown(sk.RIGHT_ARROW)) {
+				state.position.x = state.position.x + state.speed;
+			}
+			if (sk.keyIsDown(sk.UP_ARROW)) {
+				state.position.y = state.position.y - state.speed;
+			}
+			if (sk.keyIsDown(sk.DOWN_ARROW)) {
+				state.position.y = state.position.y + state.speed;
+			}
+			socket.emit('player-pos-and-size', {
+				id: socket.id,
+				position: state.position,
+				size: state.size,
+			});
+		},
+	});
+
+	const positionUpdater = state => ({
+		updatePosition: position => {
+			state.position = position;
+		},
+	});
+
+	const sizeUpdater = state => ({
+		updateSize: size => {
+			state.size += size;
+		},
+	});
 };
