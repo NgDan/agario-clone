@@ -6,12 +6,14 @@ const FoodFactory = (foodSize = 10) => {
 		foodSize: foodSize,
 		translateVector: { x: 0, y: 0 },
 	};
+
 	const foodSetter = state => ({
 		setFood: (food, foodSize) => {
 			state.food = food;
 			state.foodSize = foodSize;
 		},
 	});
+
 	const deleter = state => ({
 		deletePiece: id => {
 			set(state, `food[${[id]}].active`, false);

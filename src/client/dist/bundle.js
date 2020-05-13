@@ -108,10 +108,6 @@ let s = sk => {
 		sk.frameRate(60);
 		sk.createCanvas(800, 600);
 
-		// sk.player = new Player(
-		// 	{ x: initialPlayerPosition.x, y: initialPlayerPosition.y },
-		// 	80
-		// );
 		sk.player = Object(_player__WEBPACK_IMPORTED_MODULE_2__["default"])(
 			{ x: _constants__WEBPACK_IMPORTED_MODULE_3__["initialPlayerPosition"].x, y: _constants__WEBPACK_IMPORTED_MODULE_3__["initialPlayerPosition"].y },
 			80
@@ -273,12 +269,14 @@ const FoodFactory = (foodSize = 10) => {
 		foodSize: foodSize,
 		translateVector: { x: 0, y: 0 },
 	};
+
 	const foodSetter = state => ({
 		setFood: (food, foodSize) => {
 			state.food = food;
 			state.foodSize = foodSize;
 		},
 	});
+
 	const deleter = state => ({
 		deletePiece: id => {
 			Object(lodash__WEBPACK_IMPORTED_MODULE_0__["set"])(state, `food[${[id]}].active`, false);
@@ -17509,52 +17507,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PlayerFactory; });
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
 
-// export default class Player {
-// 	constructor(position, size, id = 0, socket) {
-// 		this.id = id;
-// 		this.size = size;
-// 		this.speed = 2;
-// 		this.position = position;
-// 	}
-
-// 	handleKeys(sk, socket) {
-// 		if (sk.keyIsDown(sk.LEFT_ARROW)) {
-// 			this.position.x = this.position.x - this.speed;
-// 		}
-// 		if (sk.keyIsDown(sk.RIGHT_ARROW)) {
-// 			this.position.x = this.position.x + this.speed;
-// 		}
-// 		if (sk.keyIsDown(sk.UP_ARROW)) {
-// 			this.position.y = this.position.y - this.speed;
-// 		}
-// 		if (sk.keyIsDown(sk.DOWN_ARROW)) {
-// 			this.position.y = this.position.y + this.speed;
-// 		}
-// 		socket.emit('player-pos-and-size', {
-// 			id: socket.id,
-// 			position: this.position,
-// 			size: this.size,
-// 		});
-// 	}
-
-// 	updatePosition(position) {
-// 		this.position = position;
-// 	}
-
-// 	updateSize(size) {
-// 		this.size += size;
-// 	}
-
-// 	draw(sk) {
-// 		sk.push();
-// 		sk.fill('red');
-// 		sk.translate(initialPlayerPosition.x, initialPlayerPosition.y);
-// 		sk.translate(-this.position.x, -this.position.y);
-// 		sk.ellipse(this.position.x, this.position.y, this.size);
-// 		sk.fill('white');
-// 		sk.pop();
-// 	}
-// }
 
 function PlayerFactory(position, size, id = 0) {
 	let state = {

@@ -15,7 +15,7 @@ app.use(express.static('../client'));
 let food = FoodFactory({ x: 800, y: 600 }, 10);
 
 food.generate(200);
-console.log(food);
+
 io.on('connection', socket => {
 	socket.on('connect', () => {
 		socket.broadcast.emit('broadcast', data);
