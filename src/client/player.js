@@ -7,20 +7,23 @@ export default function PlayerFactory(position, size, id = 0) {
 		speed: 2,
 		position: position,
 	};
-
 	const keyHandler = state => ({
 		handleKeys: (sk, socket) => {
 			if (sk.keyIsDown(sk.LEFT_ARROW)) {
 				state.position.x = state.position.x - state.speed;
+				if (state.position.x < 0) state.position.x = 0;
 			}
 			if (sk.keyIsDown(sk.RIGHT_ARROW)) {
 				state.position.x = state.position.x + state.speed;
+				if (state.position.x > 1500) state.position.x = 1500;
 			}
 			if (sk.keyIsDown(sk.UP_ARROW)) {
 				state.position.y = state.position.y - state.speed;
+				if (state.position.y < 0) state.position.y = 0;
 			}
 			if (sk.keyIsDown(sk.DOWN_ARROW)) {
 				state.position.y = state.position.y + state.speed;
+				if (state.position.y > 1500) state.position.y = 1500;
 			}
 			socket.emit('player-pos-and-size', {
 				id: socket.id,
@@ -32,6 +35,7 @@ export default function PlayerFactory(position, size, id = 0) {
 
 	const positionUpdater = state => ({
 		updatePosition: position => {
+			console.log(position);
 			state.position = position;
 		},
 	});

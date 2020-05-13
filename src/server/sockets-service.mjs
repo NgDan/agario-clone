@@ -12,7 +12,7 @@ let io = socketio(httpServer);
 
 app.use(express.static('../client'));
 
-let food = FoodFactory({ x: 800, y: 600 }, 10);
+let food = FoodFactory({ x: 1500, y: 1500 }, 10);
 
 food.generate(200);
 
