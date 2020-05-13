@@ -55,7 +55,8 @@ let s = sk => {
 		});
 
 		//temporary for development purposes
-		document.querySelector('.request-food').addEventListener('click', () => {
+		document.querySelector('.request-food').addEventListener('click', food => {
+			console.log(food);
 			sk.socket.emit('reset-food');
 		});
 	};

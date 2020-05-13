@@ -153,7 +153,8 @@ let s = sk => {
 		});
 
 		//temporary for development purposes
-		document.querySelector('.request-food').addEventListener('click', () => {
+		document.querySelector('.request-food').addEventListener('click', food => {
+			console.log(food);
 			sk.socket.emit('reset-food');
 		});
 	};
@@ -17508,7 +17509,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
 
 
-function PlayerFactory(position, size, id = 0) {
+function PlayerFactory(position, size, id = _constants__WEBPACK_IMPORTED_MODULE_0__["mapBoundary"].min) {
 	let state = {
 		id: id,
 		size: size,
@@ -17519,19 +17520,23 @@ function PlayerFactory(position, size, id = 0) {
 		handleKeys: (sk, socket) => {
 			if (sk.keyIsDown(sk.LEFT_ARROW)) {
 				state.position.x = state.position.x - state.speed;
-				if (state.position.x < 0) state.position.x = 0;
+				if (state.position.x < _constants__WEBPACK_IMPORTED_MODULE_0__["mapBoundary"].min)
+					state.position.x = _constants__WEBPACK_IMPORTED_MODULE_0__["mapBoundary"].min;
 			}
 			if (sk.keyIsDown(sk.RIGHT_ARROW)) {
 				state.position.x = state.position.x + state.speed;
-				if (state.position.x > 1500) state.position.x = 1500;
+				if (state.position.x > _constants__WEBPACK_IMPORTED_MODULE_0__["mapBoundary"].max)
+					state.position.x = _constants__WEBPACK_IMPORTED_MODULE_0__["mapBoundary"].max;
 			}
 			if (sk.keyIsDown(sk.UP_ARROW)) {
 				state.position.y = state.position.y - state.speed;
-				if (state.position.y < 0) state.position.y = 0;
+				if (state.position.y < _constants__WEBPACK_IMPORTED_MODULE_0__["mapBoundary"].min)
+					state.position.y = _constants__WEBPACK_IMPORTED_MODULE_0__["mapBoundary"].min;
 			}
 			if (sk.keyIsDown(sk.DOWN_ARROW)) {
 				state.position.y = state.position.y + state.speed;
-				if (state.position.y > 1500) state.position.y = 1500;
+				if (state.position.y > _constants__WEBPACK_IMPORTED_MODULE_0__["mapBoundary"].max)
+					state.position.y = _constants__WEBPACK_IMPORTED_MODULE_0__["mapBoundary"].max;
 			}
 			socket.emit('player-pos-and-size', {
 				id: socket.id,
@@ -17583,7 +17588,9 @@ function PlayerFactory(position, size, id = 0) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initialPlayerPosition", function() { return initialPlayerPosition; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapBoundary", function() { return mapBoundary; });
 const initialPlayerPosition = { x: 400, y: 300 };
+const mapBoundary = { max: 1500, min: 0 };
 
 
 

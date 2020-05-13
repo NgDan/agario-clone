@@ -1,6 +1,6 @@
-import { initialPlayerPosition } from './constants';
+import { initialPlayerPosition, mapBoundary } from './constants';
 
-export default function PlayerFactory(position, size, id = 0) {
+export default function PlayerFactory(position, size, id = mapBoundary.min) {
 	let state = {
 		id: id,
 		size: size,
@@ -11,19 +11,23 @@ export default function PlayerFactory(position, size, id = 0) {
 		handleKeys: (sk, socket) => {
 			if (sk.keyIsDown(sk.LEFT_ARROW)) {
 				state.position.x = state.position.x - state.speed;
-				if (state.position.x < 0) state.position.x = 0;
+				if (state.position.x < mapBoundary.min)
+					state.position.x = mapBoundary.min;
 			}
 			if (sk.keyIsDown(sk.RIGHT_ARROW)) {
 				state.position.x = state.position.x + state.speed;
-				if (state.position.x > 1500) state.position.x = 1500;
+				if (state.position.x > mapBoundary.max)
+					state.position.x = mapBoundary.max;
 			}
 			if (sk.keyIsDown(sk.UP_ARROW)) {
 				state.position.y = state.position.y - state.speed;
-				if (state.position.y < 0) state.position.y = 0;
+				if (state.position.y < mapBoundary.min)
+					state.position.y = mapBoundary.min;
 			}
 			if (sk.keyIsDown(sk.DOWN_ARROW)) {
 				state.position.y = state.position.y + state.speed;
-				if (state.position.y > 1500) state.position.y = 1500;
+				if (state.position.y > mapBoundary.max)
+					state.position.y = mapBoundary.max;
 			}
 			socket.emit('player-pos-and-size', {
 				id: socket.id,

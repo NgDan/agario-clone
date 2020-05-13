@@ -52,8 +52,8 @@ io.on('connection', socket => {
 
 	socket.on('reset-food', data => {
 		food.resetFood();
-		socket.emit('send-food', food);
-		socket.broadcast.emit('send-food', food);
+		socket.emit('send-food', food.state);
+		socket.broadcast.emit('send-food', food.state);
 	});
 });
 
