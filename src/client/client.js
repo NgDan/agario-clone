@@ -14,7 +14,6 @@ let s = sk => {
 			{ x: initialPlayerPosition.x, y: initialPlayerPosition.y },
 			80
 		);
-
 		sk.players = PlayersConstructor(sk);
 
 		sk.food = FoodFactory();
