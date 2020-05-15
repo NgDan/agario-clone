@@ -112,6 +112,7 @@ let s = sk => {
 			{ x: _constants__WEBPACK_IMPORTED_MODULE_3__["initialPlayerPosition"].x, y: _constants__WEBPACK_IMPORTED_MODULE_3__["initialPlayerPosition"].y },
 			80
 		);
+
 		sk.players = Object(_players__WEBPACK_IMPORTED_MODULE_0__["default"])(sk);
 
 		sk.food = Object(_client_food__WEBPACK_IMPORTED_MODULE_1__["FoodFactory"])();
