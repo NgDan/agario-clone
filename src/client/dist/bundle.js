@@ -201,6 +201,10 @@ const P5 = new p5(s);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PlayersConstructor; });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+
+
 function PlayersConstructor(sk) {
 	let playersState = {
 		players: {},
@@ -227,6 +231,7 @@ const updater = state => {
 		},
 	};
 };
+
 const remover = state => ({
 	remove: id => {
 		delete state.players[id];
@@ -237,14 +242,15 @@ const drawer = (state, sk) => ({
 	draw: translateVector => {
 		state.translateVector.x = -translateVector.x;
 		state.translateVector.y = -translateVector.y;
-		if (Object.entries(state.players).length > 0) {
-			for (const player of Object.keys(state.players)) {
+		const players = state.players;
+		if (Object.entries(players).length > 0) {
+			for (const player of Object.keys(players)) {
 				sk.push();
 				sk.translate(state.translateVector.x, state.translateVector.y);
 				sk.ellipse(
-					state.players[player].position.x,
-					state.players[player].position.y,
-					state.players[player].size
+					players[player].position.x,
+					players[player].position.y,
+					players[player].size
 				);
 				sk.pop();
 			}
@@ -262,14 +268,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FoodFactory", function() { return FoodFactory; });
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _helpers_areParticlesIntersected__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(62);
 
 
-const areParticlesIntersected = (particle1, particle2) =>
-	Math.pow(particle1.x - particle2.x, 2) +
-		Math.pow(particle1.y - particle2.y, 2) <
-	Math.pow(particle1.size / 2 + particle2.size / 2, 2);
 
-const createCollisionDetector = state => ({
+const createCollisionDetector = (state, areParticlesIntersected) => ({
 	collisionDetector: (x, y, size, player, socket) => {
 		for (let id in state.food) {
 			let piece = state.food[id];
@@ -280,7 +283,8 @@ const createCollisionDetector = state => ({
 				piece.active
 			) {
 				socket.emit('piece-eaten', id);
-				piece.active = false;
+				// piece.active = false;
+				Object(lodash__WEBPACK_IMPORTED_MODULE_0__["set"])(piece, 'active', false);
 				player.updateSize(1);
 			}
 		}
@@ -349,7 +353,7 @@ const FoodFactory = (foodSize = 10) => {
 		...foodSetter(state),
 		...deleter(state),
 		...translater(state),
-		...createCollisionDetector(state),
+		...createCollisionDetector(state, _helpers_areParticlesIntersected__WEBPACK_IMPORTED_MODULE_1__["default"]),
 		...drawer(state),
 	});
 };
@@ -27862,6 +27866,22 @@ Backoff.prototype.setJitter = function(jitter){
   this.jitter = jitter;
 };
 
+
+
+/***/ }),
+/* 62 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return areParticlesIntersected; });
+function areParticlesIntersected(particle1, particle2) {
+	return (
+		Math.pow(particle1.x - particle2.x, 2) +
+			Math.pow(particle1.y - particle2.y, 2) <
+		Math.pow(particle1.size / 2 + particle2.size / 2, 2)
+	);
+}
 
 
 /***/ })

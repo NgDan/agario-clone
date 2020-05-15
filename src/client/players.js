@@ -1,3 +1,5 @@
+import { set } from 'lodash';
+
 export default function PlayersConstructor(sk) {
 	let playersState = {
 		players: {},
@@ -24,6 +26,7 @@ const updater = state => {
 		},
 	};
 };
+
 const remover = state => ({
 	remove: id => {
 		delete state.players[id];
@@ -34,14 +37,15 @@ const drawer = (state, sk) => ({
 	draw: translateVector => {
 		state.translateVector.x = -translateVector.x;
 		state.translateVector.y = -translateVector.y;
-		if (Object.entries(state.players).length > 0) {
-			for (const player of Object.keys(state.players)) {
+		const players = state.players;
+		if (Object.entries(players).length > 0) {
+			for (const player of Object.keys(players)) {
 				sk.push();
 				sk.translate(state.translateVector.x, state.translateVector.y);
 				sk.ellipse(
-					state.players[player].position.x,
-					state.players[player].position.y,
-					state.players[player].size
+					players[player].position.x,
+					players[player].position.y,
+					players[player].size
 				);
 				sk.pop();
 			}
