@@ -12,7 +12,8 @@ let s = sk => {
 
 		sk.player = PlayerFactory(
 			{ x: initialPlayerPosition.x, y: initialPlayerPosition.y },
-			80
+			80,
+			sk.socket.id
 		);
 
 		sk.players = PlayersConstructor(sk);

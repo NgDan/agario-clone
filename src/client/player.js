@@ -1,6 +1,6 @@
 import { initialPlayerPosition, mapBoundary } from './constants';
 
-export default function PlayerFactory(position, size, id = mapBoundary.min) {
+export default function PlayerFactory(position, size, id) {
 	let state = {
 		id: id,
 		size: size,
