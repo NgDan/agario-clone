@@ -49,6 +49,7 @@ let s = sk => {
 		sk.socket.on('user-disconnected', id => {
 			sk.players.remove(id);
 		});
+
 		document.addEventListener('visibilitychange', () => {
 			if (document.visibilityState === 'visible') {
 				sk.socket.emit('request-players');
@@ -82,13 +83,14 @@ let s = sk => {
 			sk
 		);
 		sk.food.draw(sk);
-		sk.food.collisionDetector(
+		sk.food.foodCollisionDetector(
 			sk.player.state.position.x,
 			sk.player.state.position.y,
 			sk.player.state.size,
 			sk.player,
 			sk.socket
 		);
+		sk.players.playersCollisionDetector(sk.player.state, 0.25);
 	};
 	sk.setup = setup;
 	sk.draw = draw;

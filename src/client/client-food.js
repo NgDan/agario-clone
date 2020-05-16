@@ -2,7 +2,7 @@ import { set } from 'lodash';
 import areParticlesIntersected from '../helpers/areParticlesIntersected';
 
 const createCollisionDetector = (state, areParticlesIntersected) => ({
-	collisionDetector: (x, y, size, player, socket) => {
+	foodCollisionDetector: (x, y, size, player, socket) => {
 		for (let id in state.food) {
 			let piece = state.food[id];
 			let playerProps = { x: piece.x, y: piece.y, size: size };

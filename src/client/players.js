@@ -1,20 +1,7 @@
 import { set } from 'lodash';
-
-export default function PlayersConstructor(sk) {
-	let playersState = {
-		players: {},
-		translateVector: { x: 0, y: 0 },
-	};
-	return Object.freeze({
-		playersState,
-		...updater(playersState),
-		...remover(playersState),
-		...drawer(playersState, sk),
-	});
-}
+import areParticlesIntersected from '../helpers/areParticlesIntersected';
 
 const updater = state => {
-	console.log('state.players: ', state.players);
 	return {
 		update: ({ id, position, size }) => {
 			if (position) {
@@ -30,6 +17,36 @@ const updater = state => {
 const remover = state => ({
 	remove: id => {
 		delete state.players[id];
+	},
+});
+
+const createCollisionDetector = (state, sk) => ({
+	playersCollisionDetector: (player, tolerance) => {
+		const players = state.players;
+		for (let id in players) {
+			const remotePlayer = players[id];
+			const particle1 = {
+				id: player.id,
+				x: player.position.x,
+				y: player.position.y,
+				size: player.size,
+			};
+			const particle2 = {
+				id: id,
+				x: remotePlayer.position.x,
+				y: remotePlayer.position.y,
+				size: remotePlayer.size,
+			};
+			console.log(particle1.size);
+			if (
+				areParticlesIntersected(particle1, particle2, tolerance) &&
+				Math.abs(particle1.size - particle2.size) > 30
+			) {
+				particle1.size > particle2.size
+					? console.log('kill particle ', particle2.id)
+					: console.log('kill particle ', particle1.id);
+			}
+		}
 	},
 });
 
@@ -52,3 +69,18 @@ const drawer = (state, sk) => ({
 		}
 	},
 });
+
+export default function PlayersConstructor(sk) {
+	let playersState = {
+		players: {},
+		translateVector: { x: 0, y: 0 },
+	};
+
+	return Object.freeze({
+		playersState,
+		...updater(playersState),
+		...remover(playersState),
+		...drawer(playersState, sk),
+		...createCollisionDetector(playersState),
+	});
+}
