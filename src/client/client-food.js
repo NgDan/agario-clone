@@ -12,31 +12,12 @@ const createCollisionDetector = (state, areParticlesIntersected) => ({
 				piece.active
 			) {
 				socket.emit('piece-eaten', id);
-				// piece.active = false;
 				set(piece, 'active', false);
 				player.updateSize(1);
 			}
 		}
 	},
 });
-
-// const createCollisionDetector = state => ({
-// 	collisionDetector: (x, y, size, player, socket) => {
-// 		for (let id in state.food) {
-// 			let piece = state.food[id];
-
-// 			if (
-// 				Math.pow(x - piece.x, 2) + Math.pow(y - piece.y, 2) <
-// 					Math.pow(size / 2 + state.foodSize / 2, 2) &&
-// 				state.food[id].active
-// 			) {
-// 				socket.emit('piece-eaten', id);
-// 				state.food[id].active = false;
-// 				player.updateSize(1);
-// 			}
-// 		}
-// 	},
-// });
 
 const foodSetter = state => ({
 	setFood: (food, foodSize) => {
