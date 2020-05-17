@@ -39,7 +39,6 @@ export default function PlayerFactory(position, size, id) {
 				size: state.size,
 				color: state.color,
 			});
-			console.log(state.color);
 		},
 	});
 
@@ -82,6 +81,6 @@ export default function PlayerFactory(position, size, id) {
 		...positionUpdater(state),
 		...sizeUpdater(state),
 		...drawer(state),
-		...particleKiller(state),
+		...killer(state),
 	});
 }

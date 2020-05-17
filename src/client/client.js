@@ -33,11 +33,9 @@ let s = sk => {
 				size: sk.player.size,
 				color: sk.player.color,
 			});
-			console.log('player color: ', sk.player.color);
 		});
 
 		sk.socket.on('send-food', foodFromServer => {
-			console.log(foodFromServer);
 			sk.food.setFood(foodFromServer.food, foodFromServer.foodSize);
 		});
 
@@ -72,9 +70,10 @@ let s = sk => {
 
 	const draw = () => {
 		if (sk.players && sk.player) {
+			const playerIsAlive = sk.player.state.alive;
 			sk.background(100);
 			sk.player.draw(sk);
-			sk.player.handleKeys(sk, sk.socket);
+			playerIsAlive && sk.player.handleKeys(sk, sk.socket);
 			sk.players.draw({
 				x: sk.player.state.position.x - initialPlayerPosition.x,
 				y: sk.player.state.position.y - initialPlayerPosition.y,
@@ -85,14 +84,21 @@ let s = sk => {
 				sk
 			);
 			sk.food.draw(sk);
-			sk.food.foodCollisionDetector(
-				sk.player.state.position.x,
-				sk.player.state.position.y,
-				sk.player.state.size,
-				sk.player,
-				sk.socket
+			playerIsAlive &&
+				sk.food.foodCollisionDetector(
+					sk.player.state.position.x,
+					sk.player.state.position.y,
+					sk.player.state.size,
+					sk.player,
+					sk.socket
+				);
+			const collision = sk.players.playersCollisionDetector(
+				sk.player.state,
+				0.25
 			);
-			sk.players.playersCollisionDetector(sk.player.state, 0.25);
+			if (collision && collision === sk.player.state.id) {
+				sk.player.kill();
+			}
 		}
 	};
 	sk.setup = setup;

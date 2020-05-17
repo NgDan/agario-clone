@@ -21,7 +21,6 @@ const createCollisionDetector = (state, areParticlesIntersected) => ({
 
 const foodSetter = state => ({
 	setFood: (food, foodSize) => {
-		console.log(state.food);
 		state.food = food;
 		state.foodSize = foodSize;
 	},
