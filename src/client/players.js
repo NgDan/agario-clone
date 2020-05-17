@@ -47,7 +47,7 @@ const createCollisionDetector = (state, sk) => ({
 				//kill particle1 function
 				particle1.size > particle2.size
 					? console.log('kill particle ', particle2.id)
-					: sk.socket.disconnect();
+					: player.kill();
 			}
 		}
 	},

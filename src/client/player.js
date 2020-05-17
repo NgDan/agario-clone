@@ -49,6 +49,12 @@ export default function PlayerFactory(position, size, id) {
 		},
 	});
 
+	const killer = state => ({
+		kill: () => {
+			set(state, 'alive', false);
+		},
+	});
+
 	const sizeUpdater = state => ({
 		updateSize: size => {
 			state.size += size;
@@ -76,5 +82,6 @@ export default function PlayerFactory(position, size, id) {
 		...positionUpdater(state),
 		...sizeUpdater(state),
 		...drawer(state),
+		...particleKiller(state),
 	});
 }
