@@ -1,5 +1,6 @@
 import { initialPlayerPosition, mapBoundary, foodColors } from './constants';
 import getRandomArrayItem from '../helpers/getRandomArrayItem';
+import { set } from 'lodash';
 export default function PlayerFactory(position, size, id) {
 	let state = {
 		id: id,
@@ -7,6 +8,7 @@ export default function PlayerFactory(position, size, id) {
 		speed: 2,
 		position: position,
 		color: getRandomArrayItem(foodColors),
+		alive: true,
 	};
 
 	const keyHandler = state => ({
@@ -43,7 +45,7 @@ export default function PlayerFactory(position, size, id) {
 
 	const positionUpdater = state => ({
 		updatePosition: position => {
-			state.position = position;
+			set(state, 'position', position);
 		},
 	});
 
@@ -55,14 +57,16 @@ export default function PlayerFactory(position, size, id) {
 
 	const drawer = state => ({
 		draw: sk => {
-			sk.push();
-			sk.fill(state.color);
-			sk.noStroke();
-			sk.translate(initialPlayerPosition.x, initialPlayerPosition.y);
-			sk.translate(-state.position.x, -state.position.y);
-			sk.ellipse(state.position.x, state.position.y, state.size);
-			sk.fill('white');
-			sk.pop();
+			if (state.alive) {
+				sk.push();
+				sk.fill(state.color);
+				sk.noStroke();
+				sk.translate(initialPlayerPosition.x, initialPlayerPosition.y);
+				sk.translate(-state.position.x, -state.position.y);
+				sk.ellipse(state.position.x, state.position.y, state.size);
+				sk.fill('white');
+				sk.pop();
+			}
 		},
 	});
 

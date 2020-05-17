@@ -44,6 +44,7 @@ const createCollisionDetector = (state, sk) => ({
 				areParticlesIntersected(particle1, particle2, tolerance) &&
 				Math.abs(particle1.size - particle2.size) > 30
 			) {
+				//kill particle1 function
 				particle1.size > particle2.size
 					? console.log('kill particle ', particle2.id)
 					: sk.socket.disconnect();
