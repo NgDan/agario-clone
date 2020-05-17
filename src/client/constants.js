@@ -1,4 +1,4 @@
 const initialPlayerPosition = { x: 400, y: 300 };
 const mapBoundary = { max: 1500, min: 0 };
-
-export { initialPlayerPosition, mapBoundary };
+const foodColors = ['#70AE98', '#ECBE7A', '#E58B88', '#9DABDD', '#D9EFFC'];
+export { initialPlayerPosition, mapBoundary, foodColors };

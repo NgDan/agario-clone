@@ -21,6 +21,7 @@ const createCollisionDetector = (state, areParticlesIntersected) => ({
 
 const foodSetter = state => ({
 	setFood: (food, foodSize) => {
+		console.log(state.food);
 		state.food = food;
 		state.foodSize = foodSize;
 	},
@@ -45,7 +46,11 @@ const drawer = state => ({
 		for (let item in state.food) {
 			let piece = state.food[item];
 			if (state.food[item].active) {
+				sk.push();
+				sk.fill(piece.color);
+				sk.noStroke();
 				sk.ellipse(piece.x, piece.y, state.foodSize);
+				sk.pop();
 			}
 		}
 	},

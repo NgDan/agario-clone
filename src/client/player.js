@@ -1,14 +1,14 @@
-import { initialPlayerPosition, mapBoundary } from './constants';
-import { set } from 'lodash';
-import { curry } from 'ramda';
-console.log(curry);
+import { initialPlayerPosition, mapBoundary, foodColors } from './constants';
+import getRandomArrayItem from '../helpers/getRandomArrayItem';
 export default function PlayerFactory(position, size, id) {
 	let state = {
 		id: id,
 		size: size,
 		speed: 2,
 		position: position,
+		color: getRandomArrayItem(foodColors),
 	};
+
 	const keyHandler = state => ({
 		handleKeys: (sk, socket) => {
 			if (sk.keyIsDown(sk.LEFT_ARROW)) {
@@ -35,11 +35,11 @@ export default function PlayerFactory(position, size, id) {
 				id: socket.id,
 				position: state.position,
 				size: state.size,
+				color: state.color,
 			});
+			console.log(state.color);
 		},
 	});
-
-	const idSetter = state => ({ setId: curry(set)(state, 'id') });
 
 	const positionUpdater = state => ({
 		updatePosition: position => {
@@ -56,7 +56,8 @@ export default function PlayerFactory(position, size, id) {
 	const drawer = state => ({
 		draw: sk => {
 			sk.push();
-			sk.fill('red');
+			sk.fill(state.color);
+			sk.noStroke();
 			sk.translate(initialPlayerPosition.x, initialPlayerPosition.y);
 			sk.translate(-state.position.x, -state.position.y);
 			sk.ellipse(state.position.x, state.position.y, state.size);
@@ -67,7 +68,6 @@ export default function PlayerFactory(position, size, id) {
 
 	return Object.freeze({
 		state,
-		...idSetter(state),
 		...keyHandler(state),
 		...positionUpdater(state),
 		...sizeUpdater(state),

@@ -1,4 +1,6 @@
 import set from 'lodash';
+import { foodColors } from './constants';
+import getRandomArrayItem from './helpers/getRandomArrayItem';
 
 const FoodFactory = (canvasDimensions, foodSize) => {
 	const state = {
@@ -13,7 +15,8 @@ const FoodFactory = (canvasDimensions, foodSize) => {
 				let x = Math.floor(Math.random() * state.canvasDimensions.x);
 				let y = Math.floor(Math.random() * state.canvasDimensions.y);
 				let id = '' + x + y;
-				state.food[id] = { x: x, y: y, active: true };
+				let color = getRandomArrayItem(foodColors);
+				state.food[id] = { x: x, y: y, color: color, active: true };
 			}
 		},
 	});

@@ -9,7 +9,6 @@ let s = sk => {
 		sk.socket = io();
 		sk.frameRate(60);
 		sk.createCanvas(800, 600);
-		console.log('sk.socket.id:', sk.socket.id);
 
 		sk.socket.on('connect', () => {
 			// setTimeout(() => {
@@ -25,7 +24,6 @@ let s = sk => {
 			sk.food = FoodFactory();
 			sk.socket.emit('request-food');
 			sk.socket.emit('request-players');
-			// sk.player.setId();
 		});
 
 		sk.socket.on('request-players', () => {
@@ -33,10 +31,13 @@ let s = sk => {
 				id: sk.socket.id,
 				position: sk.player.position,
 				size: sk.player.size,
+				color: sk.player.color,
 			});
+			console.log('player color: ', sk.player.color);
 		});
 
 		sk.socket.on('send-food', foodFromServer => {
+			console.log(foodFromServer);
 			sk.food.setFood(foodFromServer.food, foodFromServer.foodSize);
 		});
 

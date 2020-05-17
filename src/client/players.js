@@ -3,12 +3,15 @@ import areParticlesIntersected from '../helpers/areParticlesIntersected';
 
 const updater = state => {
 	return {
-		update: ({ id, position, size }) => {
+		update: ({ id, position, size, color }) => {
 			if (position) {
 				state.players[id] = { ...state.players[id], position: position };
 			}
 			if (size) {
 				state.players[id] = { ...state.players[id], size: size };
+			}
+			if (color) {
+				state.players[id] = { ...state.players[id], color: color };
 			}
 		},
 	};
@@ -37,14 +40,13 @@ const createCollisionDetector = (state, sk) => ({
 				y: remotePlayer.position.y,
 				size: remotePlayer.size,
 			};
-			console.log(particle1.size);
 			if (
 				areParticlesIntersected(particle1, particle2, tolerance) &&
 				Math.abs(particle1.size - particle2.size) > 30
 			) {
 				particle1.size > particle2.size
 					? console.log('kill particle ', particle2.id)
-					: console.log('kill particle ', particle1.id);
+					: sk.socket.disconnect();
 			}
 		}
 	},
@@ -56,14 +58,13 @@ const drawer = (state, sk) => ({
 		state.translateVector.y = -translateVector.y;
 		const players = state.players;
 		if (Object.entries(players).length > 0) {
-			for (const player of Object.keys(players)) {
+			for (const id of Object.keys(players)) {
+				const player = players[id];
 				sk.push();
+				sk.fill(player.color);
+				sk.noStroke();
 				sk.translate(state.translateVector.x, state.translateVector.y);
-				sk.ellipse(
-					players[player].position.x,
-					players[player].position.y,
-					players[player].size
-				);
+				sk.ellipse(player.position.x, player.position.y, player.size);
 				sk.pop();
 			}
 		}
