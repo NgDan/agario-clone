@@ -1,5 +1,7 @@
 import { initialPlayerPosition, mapBoundary } from './constants';
-
+import { set } from 'lodash';
+import { curry } from 'ramda';
+console.log(curry);
 export default function PlayerFactory(position, size, id) {
 	let state = {
 		id: id,
@@ -37,9 +39,10 @@ export default function PlayerFactory(position, size, id) {
 		},
 	});
 
+	const idSetter = state => ({ setId: curry(set)(state, 'id') });
+
 	const positionUpdater = state => ({
 		updatePosition: position => {
-			console.log(position);
 			state.position = position;
 		},
 	});
@@ -64,6 +67,7 @@ export default function PlayerFactory(position, size, id) {
 
 	return Object.freeze({
 		state,
+		...idSetter(state),
 		...keyHandler(state),
 		...positionUpdater(state),
 		...sizeUpdater(state),
