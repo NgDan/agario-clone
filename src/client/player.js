@@ -38,6 +38,7 @@ export default function PlayerFactory(position, size, id) {
 				position: state.position,
 				size: state.size,
 				color: state.color,
+				alive: state.alive,
 			});
 		},
 	});
@@ -49,8 +50,9 @@ export default function PlayerFactory(position, size, id) {
 	});
 
 	const killer = state => ({
-		kill: () => {
+		kill: socket => {
 			set(state, 'alive', false);
+			// socket.emit
 		},
 	});
 

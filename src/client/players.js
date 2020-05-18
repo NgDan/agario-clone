@@ -3,7 +3,7 @@ import areParticlesIntersected from '../helpers/areParticlesIntersected';
 
 const updater = state => {
 	return {
-		update: ({ id, position, size, color }) => {
+		update: ({ id, position, size, color, alive }) => {
 			if (position) {
 				state.players[id] = { ...state.players[id], position: position };
 			}
@@ -12,6 +12,9 @@ const updater = state => {
 			}
 			if (color) {
 				state.players[id] = { ...state.players[id], color: color };
+			}
+			if (alive) {
+				state.players[id] = { ...state.players[id], alive: alive };
 			}
 		},
 	};
@@ -44,7 +47,9 @@ const createCollisionDetector = (state, sk) => ({
 				areParticlesIntersected(particle1, particle2, tolerance) &&
 				Math.abs(particle1.size - particle2.size) > 30
 			) {
-				return particle1.size > particle2.size ? particle2.id : particle1.id;
+				return particle1.size > particle2.size
+					? { loser: particle2.id, winner: particle1.id }
+					: { loser: particle1.id, winner: particle2.id };
 			}
 			return false;
 		}
@@ -59,12 +64,14 @@ const drawer = (state, sk) => ({
 		if (Object.entries(players).length > 0) {
 			for (const id of Object.keys(players)) {
 				const player = players[id];
-				sk.push();
-				sk.fill(player.color);
-				sk.noStroke();
-				sk.translate(state.translateVector.x, state.translateVector.y);
-				sk.ellipse(player.position.x, player.position.y, player.size);
-				sk.pop();
+				if (player.alive) {
+					sk.push();
+					sk.fill(player.color);
+					sk.noStroke();
+					sk.translate(state.translateVector.x, state.translateVector.y);
+					sk.ellipse(player.position.x, player.position.y, player.size);
+					sk.pop();
+				}
 			}
 		}
 	},

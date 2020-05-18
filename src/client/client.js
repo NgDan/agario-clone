@@ -32,6 +32,7 @@ let s = sk => {
 				position: sk.player.position,
 				size: sk.player.size,
 				color: sk.player.color,
+				alive: sk.player.alive,
 			});
 		});
 
@@ -92,13 +93,16 @@ let s = sk => {
 					sk.player,
 					sk.socket
 				);
-			const collision = sk.players.playersCollisionDetector(
+			const collisionResults = sk.players.playersCollisionDetector(
 				sk.player.state,
 				0.25
 			);
-			if (collision && collision === sk.player.state.id) {
+			console.log(collisionResults);
+			if (collisionResults && collisionResults.loser === sk.player.state.id) {
 				sk.player.kill();
+				// console.log(collisionResults.loser);
 			}
+			collisionResults && sk.players.remove(collisionResults.loser);
 		}
 	};
 	sk.setup = setup;
