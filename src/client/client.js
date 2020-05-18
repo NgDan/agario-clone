@@ -97,10 +97,8 @@ let s = sk => {
 				sk.player.state,
 				0.25
 			);
-			console.log(collisionResults);
 			if (collisionResults && collisionResults.loser === sk.player.state.id) {
 				sk.player.kill();
-				// console.log(collisionResults.loser);
 			}
 			collisionResults && sk.players.remove(collisionResults.loser);
 		}
