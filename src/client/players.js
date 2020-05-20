@@ -78,16 +78,16 @@ const drawer = (state, sk) => ({
 });
 
 export default function PlayersConstructor(sk) {
-	let playersState = {
+	let state = {
 		players: {},
 		translateVector: { x: 0, y: 0 },
 	};
 
 	return Object.freeze({
-		playersState,
-		...updater(playersState),
-		...remover(playersState),
-		...drawer(playersState, sk),
-		...createCollisionDetector(playersState),
+		state,
+		...updater(state),
+		...remover(state),
+		...drawer(state, sk),
+		...createCollisionDetector(state),
 	});
 }

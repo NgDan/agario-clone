@@ -100,6 +100,15 @@ let s = sk => {
 			if (collisionResults && collisionResults.loser === sk.player.state.id) {
 				sk.player.kill();
 			}
+			if (collisionResults && collisionResults.winner === sk.player.state.id) {
+				const loser = sk.players.state.players[collisionResults.loser];
+				console.log(
+					'loser: ',
+					sk.players.state.players[collisionResults.loser]
+				);
+				console.log('self: ', sk.player.state);
+				sk.player.updateSize(loser.size);
+			}
 			collisionResults && sk.players.remove(collisionResults.loser);
 		}
 	};
