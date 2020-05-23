@@ -19,6 +19,7 @@
 	},
 	"homepage": "https://github.com/NgDan/agario-clone#readme",
 	"devDependencies": {
+		"esm": "^3.2.25",
 		"express": "^4.17.1",
 		"lodash": "^4.17.15",
 		"ramda": "^0.27.0",
@@ -26,7 +27,5 @@
 		"webpack": "^4.42.1",
 		"webpack-cli": "^3.3.11"
 	},
-	"dependencies": {
-		"esm": "^3.2.25"
-	}
+	"dependencies": {}
 }

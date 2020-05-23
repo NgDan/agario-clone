@@ -58,6 +58,7 @@ const createCollisionDetector = (state, sk) => ({
 
 const drawer = (state, sk) => ({
 	draw: translateVector => {
+		// console.log(state);
 		state.translateVector.x = -translateVector.x;
 		state.translateVector.y = -translateVector.y;
 		const players = state.players;
