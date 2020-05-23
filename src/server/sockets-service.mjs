@@ -11,6 +11,8 @@ let httpServer = http.createServer(app);
 let io = socketio(httpServer);
 
 const players = PlayersFactory();
+players.insertPlayer('abc');
+
 app.use(express.static('../client'));
 
 let food = FoodFactory({ x: 1500, y: 1500 }, 10);

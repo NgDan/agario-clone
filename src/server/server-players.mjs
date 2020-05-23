@@ -1,15 +1,15 @@
-import set from 'lodash';
+import set from 'lodash/set';
 import { initialPlayerSize } from './constants';
 
 const playerInserter = state => ({
 	insertPlayer: id => {
-		console.log(initialPlayerSize);
-		const playerObjectPath = `players.${id}`;
+		const playerObjectPath = `players[${id}]`;
 		const initialPlayerValues = {
 			size: initialPlayerSize,
 		};
 
-		set(state, playerObjectPath, initialPlayerValues);
+		set(state, 'sdf', '123');
+		console.log(set(state, `players`, 2));
 	},
 });
 

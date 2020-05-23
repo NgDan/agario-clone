@@ -1,4 +1,4 @@
-import set from 'lodash';
+import set from 'lodash/set';
 import { foodColors } from './constants';
 import getRandomArrayItem from './helpers/getRandomArrayItem';
 
@@ -25,7 +25,6 @@ const resetter = state => ({
 		let food = state.food;
 		for (const id in food) {
 			set(state, `food[${[id]}].active`, true);
-			// state.food[id].active = true;
 		}
 	},
 });
