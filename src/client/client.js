@@ -11,14 +11,12 @@ let s = sk => {
 		sk.createCanvas(800, 600);
 
 		sk.socket.on('connect', () => {
-			// setTimeout(() => {
-			// }, 500);
 			sk.player = PlayerFactory(
 				{ x: initialPlayerPosition.x, y: initialPlayerPosition.y },
 				80,
 				sk.socket.id
 			);
-
+			console.log('connected');
 			sk.players = PlayersConstructor(sk);
 
 			sk.food = FoodFactory();

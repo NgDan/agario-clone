@@ -18,18 +18,16 @@ let food = FoodFactory(
 	{ x: mapBoundary.max, y: mapBoundary.max },
 	initialPlayerSize
 );
+
 let players = PlayersFactory();
 
 food.generate(200);
 
 io.on('connection', socket => {
-	socket.on('connect', () => {
-		socket.broadcast.emit('broadcast', data);
-	});
-
 	socket.on('request-food', () => {
 		socket.emit('send-food', food.state);
 		socket.broadcast.emit('send-food', food.state);
+		console.log('food requested');
 	});
 
 	socket.on('request-players', () => {
