@@ -11,7 +11,6 @@ let httpServer = http.createServer(app);
 let io = socketio(httpServer);
 
 const players = PlayersFactory();
-players.insertPlayer('abc');
 
 app.use(express.static('../client'));
 

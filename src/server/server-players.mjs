@@ -1,15 +1,36 @@
 import set from 'lodash/set';
-import { initialPlayerSize } from './constants';
+import { initialPlayerSize, mapBoundary, foodColors } from './constants';
+import getRandomArrayItem from './helpers/getRandomArrayItem';
 
 const playerInserter = state => ({
 	insertPlayer: id => {
 		const playerObjectPath = `players[${id}]`;
 		const initialPlayerValues = {
 			size: initialPlayerSize,
+			pos: {
+				x: Math.ceil(Math.random() * mapBoundary.max),
+				y: Math.ceil(Math.random() * mapBoundary.max),
+			},
+			color: getRandomArrayItem(foodColors),
+			alive: true,
 		};
 
-		set(state, 'sdf', '123');
-		console.log(set(state, `players`, 2));
+		set(state, playerObjectPath, initialPlayerValues);
+		console.log(state);
+	},
+});
+
+const playerKiller = state => ({
+	killPlayer: id => {
+		const playerObjectPath = `players[${id}].alive`;
+		set(state, playerObjectPath, false);
+	},
+});
+
+const playerMover = state => ({
+	movePlayer: (id, position) => {
+		const playerObjectPath = `players[${id}].position`;
+		set(state, playerObjectPath, position);
 	},
 });
 
@@ -31,6 +52,7 @@ const PlayersFactory = () => {
 	return Object.freeze({
 		state,
 		...playerInserter(state),
+		...playerMover(state),
 	});
 };
 
