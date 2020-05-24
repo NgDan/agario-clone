@@ -16,7 +16,6 @@ const playerInserter = state => ({
 		};
 
 		set(state, playerObjectPath, initialPlayerValues);
-		console.log(state);
 	},
 });
 
@@ -53,6 +52,7 @@ const PlayersFactory = () => {
 		state,
 		...playerInserter(state),
 		...playerMover(state),
+		...playerKiller(state),
 	});
 };
 

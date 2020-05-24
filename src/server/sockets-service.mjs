@@ -6,15 +6,19 @@ import http from 'http';
 import socketio from 'socket.io';
 import { FoodFactory } from './server-food.mjs';
 import { PlayersFactory } from './server-players.mjs';
+import { mapBoundary, initialPlayerSize } from './constants';
+
 let app = express();
 let httpServer = http.createServer(app);
 let io = socketio(httpServer);
 
-const players = PlayersFactory();
-
 app.use(express.static('../client'));
 
-let food = FoodFactory({ x: 1500, y: 1500 }, 10);
+let food = FoodFactory(
+	{ x: mapBoundary.max, y: mapBoundary.max },
+	initialPlayerSize
+);
+let players = PlayersFactory();
 
 food.generate(200);
 
@@ -58,20 +62,6 @@ io.on('connection', socket => {
 		socket.broadcast.emit('send-food', food.state);
 	});
 });
-
-const state = {
-	players: {
-		'123': {
-			size: 1,
-			pos: {
-				x: 1,
-				y: 1,
-			},
-			color: 'blue',
-			alive: true,
-		},
-	},
-};
 
 httpServer.listen(3000, () => {
 	console.log('listening on *:3000');
