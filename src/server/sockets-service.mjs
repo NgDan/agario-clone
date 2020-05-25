@@ -24,6 +24,7 @@ let players = PlayersFactory();
 food.generate(200);
 
 io.on('connection', socket => {
+	players.insertPlayer(socket.id);
 	socket.on('request-food', () => {
 		socket.emit('send-food', food.state);
 		socket.broadcast.emit('send-food', food.state);
@@ -35,6 +36,7 @@ io.on('connection', socket => {
 	});
 
 	socket.on('player-pos-and-size', data => {
+		console.log('position: ', players.getPosition(socket.id));
 		socket.broadcast.emit('broadcast', data);
 	});
 

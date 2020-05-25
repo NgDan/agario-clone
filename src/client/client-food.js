@@ -1,16 +1,13 @@
 import { set } from 'lodash';
-import areParticlesIntersected from '../helpers/areParticlesIntersected';
+import doParticlesCollide from '../helpers/doParticlesCollide';
 
-const createCollisionDetector = (state, areParticlesIntersected) => ({
+const createCollisionDetector = (state, doParticlesCollide) => ({
 	foodCollisionDetector: (x, y, size, player, socket) => {
 		for (let id in state.food) {
 			let piece = state.food[id];
 			let playerProps = { x: piece.x, y: piece.y, size: size };
 			let pieceOfFoodProps = { x: x, y: y, size: state.foodSize };
-			if (
-				areParticlesIntersected(pieceOfFoodProps, playerProps) &&
-				piece.active
-			) {
+			if (doParticlesCollide(pieceOfFoodProps, playerProps) && piece.active) {
 				socket.emit('piece-eaten', id);
 				set(piece, 'active', false);
 				player.updateSize(1);
@@ -67,7 +64,7 @@ const FoodFactory = (foodSize = 10) => {
 		...foodSetter(state),
 		...deleter(state),
 		...translater(state),
-		...createCollisionDetector(state, areParticlesIntersected),
+		...createCollisionDetector(state, doParticlesCollide),
 		...drawer(state),
 	});
 };

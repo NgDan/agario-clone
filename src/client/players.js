@@ -1,5 +1,5 @@
 import { set } from 'lodash';
-import areParticlesIntersected from '../helpers/areParticlesIntersected';
+import doParticlesCollide from '../helpers/doParticlesCollide';
 
 const updater = state => {
 	return {
@@ -44,7 +44,7 @@ const createCollisionDetector = (state, sk) => ({
 				size: remotePlayer.size,
 			};
 			if (
-				areParticlesIntersected(particle1, particle2, tolerance) &&
+				doParticlesCollide(particle1, particle2, tolerance) &&
 				Math.abs(particle1.size - particle2.size) > 30
 			) {
 				return particle1.size > particle2.size

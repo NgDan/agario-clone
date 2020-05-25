@@ -1,4 +1,4 @@
-export default function areParticlesIntersected(
+export default function doParticlesCollide(
 	particle1,
 	particle2,
 	tolerance = 0

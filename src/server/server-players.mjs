@@ -1,4 +1,5 @@
 import set from 'lodash/set';
+import get from 'lodash/get';
 import { initialPlayerSize, mapBoundary, foodColors } from './constants';
 import getRandomArrayItem from './helpers/getRandomArrayItem';
 
@@ -7,7 +8,7 @@ const playerInserter = state => ({
 		const playerObjectPath = `players[${id}]`;
 		const initialPlayerValues = {
 			size: initialPlayerSize,
-			pos: {
+			position: {
 				x: Math.ceil(Math.random() * mapBoundary.max),
 				y: Math.ceil(Math.random() * mapBoundary.max),
 			},
@@ -20,17 +21,19 @@ const playerInserter = state => ({
 });
 
 const playerKiller = state => ({
-	killPlayer: id => {
-		const playerObjectPath = `players[${id}].alive`;
-		set(state, playerObjectPath, false);
-	},
+	killPlayer: id => set(state, `players[${id}].alive`, false),
 });
 
 const playerMover = state => ({
-	movePlayer: (id, position) => {
-		const playerObjectPath = `players[${id}].position`;
-		set(state, playerObjectPath, position);
-	},
+	movePlayer: (id, position) => set(state, `players[${id}].position`, position),
+});
+
+const positionGetter = state => ({
+	getPosition: id => get(state, `players[${id}].position`),
+});
+
+const sizeGetter = state => ({
+	getSize: id => get(state, `players[${id}].size`),
 });
 
 const PlayersFactory = () => {
@@ -38,7 +41,7 @@ const PlayersFactory = () => {
 		players: {
 			idFromSocket: {
 				size: 1,
-				pos: {
+				position: {
 					x: 1,
 					y: 1,
 				},
@@ -53,6 +56,8 @@ const PlayersFactory = () => {
 		...playerInserter(state),
 		...playerMover(state),
 		...playerKiller(state),
+		...positionGetter(state),
+		...sizeGetter(state),
 	});
 };
 
