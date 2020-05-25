@@ -33,7 +33,7 @@ export default function PlayerFactory(position, size, id) {
 				if (state.position.y > mapBoundary.max)
 					state.position.y = mapBoundary.max;
 			}
-			socket.emit('player-pos-and-size', {
+			socket.emit('player-new-pos-and-size', {
 				id: socket.id,
 				position: state.position,
 				size: state.size,

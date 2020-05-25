@@ -23,6 +23,10 @@ let players = PlayersFactory();
 
 food.generate(200);
 
+setInterval(() => {
+	players.detectCollision();
+}, 2000);
+
 io.on('connection', socket => {
 	players.insertPlayer(socket.id);
 	socket.on('request-food', () => {
@@ -35,9 +39,11 @@ io.on('connection', socket => {
 		socket.broadcast.emit('request-players');
 	});
 
-	socket.on('player-pos-and-size', data => {
-		console.log('position: ', players.getPosition(socket.id));
+	socket.on('player-new-pos-and-size', data => {
 		socket.broadcast.emit('broadcast', data);
+		data.position === undefined && console.log(data.position, data);
+		data.position && console.log(data.position, data);
+		data.position && players.movePlayer(data.id, data.position);
 	});
 
 	socket.on('disconnect', () => {

@@ -25,7 +25,7 @@ let s = sk => {
 		});
 
 		sk.socket.on('request-players', () => {
-			sk.socket.emit('player-pos-and-size', {
+			sk.socket.emit('player-new-pos-and-size', {
 				id: sk.socket.id,
 				position: sk.player.position,
 				size: sk.player.size,
