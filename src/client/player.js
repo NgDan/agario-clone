@@ -15,25 +15,57 @@ export default function PlayerFactory(position, size, id) {
 		handleKeys: (sk, socket) => {
 			if (sk.keyIsDown(sk.LEFT_ARROW)) {
 				state.position.x = state.position.x - state.speed;
-				if (state.position.x < mapBoundary.min)
+				socket.emit('player-new-pos-and-size', {
+					id: socket.id,
+					position: state.position,
+					size: state.size,
+					color: state.color,
+					alive: state.alive,
+				});
+				if (state.position.x < mapBoundary.min) {
 					state.position.x = mapBoundary.min;
+				}
 			}
 			if (sk.keyIsDown(sk.RIGHT_ARROW)) {
 				state.position.x = state.position.x + state.speed;
-				if (state.position.x > mapBoundary.max)
+				socket.emit('player-new-pos-and-size', {
+					id: socket.id,
+					position: state.position,
+					size: state.size,
+					color: state.color,
+					alive: state.alive,
+				});
+				if (state.position.x > mapBoundary.max) {
 					state.position.x = mapBoundary.max;
+				}
 			}
 			if (sk.keyIsDown(sk.UP_ARROW)) {
 				state.position.y = state.position.y - state.speed;
-				if (state.position.y < mapBoundary.min)
+				socket.emit('player-new-pos-and-size', {
+					id: socket.id,
+					position: state.position,
+					size: state.size,
+					color: state.color,
+					alive: state.alive,
+				});
+				if (state.position.y < mapBoundary.min) {
 					state.position.y = mapBoundary.min;
+				}
 			}
 			if (sk.keyIsDown(sk.DOWN_ARROW)) {
 				state.position.y = state.position.y + state.speed;
-				if (state.position.y > mapBoundary.max)
+				socket.emit('player-new-pos-and-size', {
+					id: socket.id,
+					position: state.position,
+					size: state.size,
+					color: state.color,
+					alive: state.alive,
+				});
+				if (state.position.y > mapBoundary.max) {
 					state.position.y = mapBoundary.max;
+				}
 			}
-			socket.emit('player-new-pos-and-size', {
+			console.log('client obj passed to player-new-pos-and-size', {
 				id: socket.id,
 				position: state.position,
 				size: state.size,

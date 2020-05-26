@@ -24,11 +24,10 @@ let players = PlayersFactory();
 food.generate(200);
 
 setInterval(() => {
-	players.detectCollision();
+	console.log(players.detectCollision());
 }, 2000);
 
 io.on('connection', socket => {
-	players.insertPlayer(socket.id);
 	socket.on('request-food', () => {
 		socket.emit('send-food', food.state);
 		socket.broadcast.emit('send-food', food.state);
@@ -39,15 +38,22 @@ io.on('connection', socket => {
 		socket.broadcast.emit('request-players');
 	});
 
+	socket.on('player-joined', id => {
+		// players.insertPlayer(id);
+	});
+
 	socket.on('player-new-pos-and-size', data => {
 		socket.broadcast.emit('broadcast', data);
-		data.position === undefined && console.log(data.position, data);
-		data.position && console.log(data.position, data);
-		data.position && players.movePlayer(data.id, data.position);
+		players.movePlayer(data.id, data.position);
+		players.setSize(data.id, data.size);
+		// console.log(players.state.players);
+		// players.detectCollision(0);
 	});
 
 	socket.on('disconnect', () => {
 		socket.broadcast.emit('user-disconnected', socket.id);
+		console.log(socket.id);
+		players.killPlayer(socket.id);
 	});
 
 	socket.on('piece-eaten', id => {

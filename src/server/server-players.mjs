@@ -17,20 +17,25 @@ const playerInserter = state => ({
 			alive: true,
 		};
 
-		set(state, playerObjectPath, initialPlayerValues);
+		id && set(state, playerObjectPath, initialPlayerValues);
 	},
 });
 
 const playerKiller = state => ({
-	killPlayer: id => set(state, `players[${id}].alive`, false),
+	killPlayer: id => id && set(state, `players[${id}].alive`, false),
 });
 
 const playerMover = state => ({
-	movePlayer: (id, position) => set(state, `players[${id}].position`, position),
+	movePlayer: (id, position) =>
+		id && position && set(state, `players[${id}].position`, position),
 });
 
 const positionGetter = state => ({
 	getPosition: id => get(state, `players[${id}].position`),
+});
+
+const sizeSetter = state => ({
+	setSize: (id, size) => id && size && set(state, `players[${id}].size`, size),
 });
 
 const sizeGetter = state => ({
@@ -38,74 +43,61 @@ const sizeGetter = state => ({
 });
 
 const collisionDetector = state => ({
-	detectCollision: (player, tolerance = 0) => {
-		const players = state.players;
+	detectCollision: tolerance => {
+		let players = state.players;
+		let collisions = [];
+		// console.log(players);
+		// console.log('=================================');
 		for (let id in players) {
 			const player1 = players[id];
 			const player1Id = id;
-			for (let id in players) {
+			console.log(players);
+			for (const id in players) {
 				const player2 = players[id];
 				const player2Id = id;
 				if (player1Id !== player2Id) {
-					// console.log(player1Id, player1);
-					// console.log(player2Id, player2);
 					const particle1 = {
 						id: player1Id,
-						x: player1.position.x,
-						y: player1.position.y,
-						size: player1.size,
+						x: get(player1, 'position.x'),
+						y: get(player1, 'position.y'),
+						size: get(player1, 'size'),
 					};
 					const particle2 = {
 						id: player2Id,
-						x: player2.position.x,
-						y: player2.position.y,
-						size: player2.size,
+						x: get(player2, 'position.x'),
+						y: get(player2, 'position.y'),
+						size: get(player2, 'size'),
 					};
+
+					console.log(particle1);
+					console.log(particle2);
 					if (
 						doParticlesCollide(particle1, particle2, tolerance) &&
 						Math.abs(particle1.size - particle2.size) > 1
 					) {
-						return particle1.size > particle2.size
-							? { loser: particle2.id, winner: particle1.id }
-							: { loser: particle1.id, winner: particle2.id };
+						particle1.size > particle2.size
+							? collisions.push({ loser: particle2.id, winner: particle1.id })
+							: collisions.push({ loser: particle1.id, winner: particle2.id });
 					}
-					return false;
 				}
 			}
 		}
+		return collisions;
+		// return false;
 	},
 });
 
 const PlayersFactory = () => {
 	const state = {
-		players: {
-			abc1: {
-				size: 1,
-				position: {
-					x: 1,
-					y: 1,
-				},
-				color: 'blue',
-				alive: true,
-			},
-			// abc2: {
-			// 	size: 2,
-			// 	position: {
-			// 		x: 1,
-			// 		y: 1,
-			// 	},
-			// 	color: 'blue',
-			// 	alive: true,
-			// },
-		},
+		players: {},
 	};
 
 	return Object.freeze({
 		state,
-		...playerInserter(state),
 		...playerMover(state),
 		...playerKiller(state),
 		...positionGetter(state),
+		...sizeSetter(state),
 		...sizeGetter(state),
 		...collisionDetector(state),
 	});
