@@ -5,24 +5,28 @@ import getRandomArrayItem from './helpers/getRandomArrayItem';
 import doParticlesCollide from './helpers/doParticlesCollide';
 
 const playerInserter = state => ({
-	insertPlayer: id => {
-		const playerObjectPath = `players[${id}]`;
-		const initialPlayerValues = {
-			size: initialPlayerSize,
-			position: {
-				x: Math.ceil(Math.random() * mapBoundary.max),
-				y: Math.ceil(Math.random() * mapBoundary.max),
-			},
-			color: getRandomArrayItem(foodColors),
-			alive: true,
-		};
+	insertPlayer: player => {
+		// const playerObjectPath = `players[${id}]`;
+		// const initialPlayerValues = {
+		// 	size: initialPlayerSize,
+		// 	position: {
+		// 		x: Math.ceil(Math.random() * mapBoundary.max),
+		// 		y: Math.ceil(Math.random() * mapBoundary.max),
+		// 	},
+		// 	color: getRandomArrayItem(foodColors),
+		// 	alive: true,
+		// };
 
-		id && set(state, playerObjectPath, initialPlayerValues);
+		player && set(state, 'players', player);
 	},
 });
 
 const playerKiller = state => ({
 	killPlayer: id => id && set(state, `players[${id}].alive`, false),
+});
+
+const playerRemover = state => ({
+	removePlayer: id => id && delete state.players[id],
 });
 
 const playerMover = state => ({
@@ -42,7 +46,7 @@ const sizeGetter = state => ({
 	getSize: id => get(state, `players[${id}].size`),
 });
 
-const collisionDetector = state => ({
+const collisionDetector = (state, { killPlayer }) => ({
 	detectCollision: tolerance => {
 		let players = state.players;
 		let collisions = [];
@@ -69,15 +73,16 @@ const collisionDetector = state => ({
 						size: get(player2, 'size'),
 					};
 
-					console.log(particle1);
-					console.log(particle2);
+					// console.log(particle1);
+					// console.log(particle2);
 					if (
 						doParticlesCollide(particle1, particle2, tolerance) &&
 						Math.abs(particle1.size - particle2.size) > 1
 					) {
+						console.log('collision');
 						particle1.size > particle2.size
-							? collisions.push({ loser: particle2.id, winner: particle1.id })
-							: collisions.push({ loser: particle1.id, winner: particle2.id });
+							? killPlayer(particle2.id)
+							: killPlayer(particle1.id);
 					}
 				}
 			}
@@ -96,10 +101,11 @@ const PlayersFactory = () => {
 		state,
 		...playerMover(state),
 		...playerKiller(state),
+		...playerRemover(state),
 		...positionGetter(state),
 		...sizeSetter(state),
 		...sizeGetter(state),
-		...collisionDetector(state),
+		...collisionDetector(state, playerKiller(state)),
 	});
 };
 

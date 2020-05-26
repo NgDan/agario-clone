@@ -24,7 +24,8 @@ let players = PlayersFactory();
 food.generate(200);
 
 setInterval(() => {
-	console.log(players.detectCollision());
+	players.detectCollision(0);
+	console.log(players.state);
 }, 2000);
 
 io.on('connection', socket => {
@@ -38,8 +39,9 @@ io.on('connection', socket => {
 		socket.broadcast.emit('request-players');
 	});
 
-	socket.on('player-joined', id => {
+	socket.on('player-joined', player => {
 		// players.insertPlayer(id);
+		console.log(player);
 	});
 
 	socket.on('player-new-pos-and-size', data => {
@@ -52,8 +54,7 @@ io.on('connection', socket => {
 
 	socket.on('disconnect', () => {
 		socket.broadcast.emit('user-disconnected', socket.id);
-		console.log(socket.id);
-		players.killPlayer(socket.id);
+		players.removePlayer(socket.id);
 	});
 
 	socket.on('piece-eaten', id => {
