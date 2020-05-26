@@ -49,9 +49,6 @@ const sizeGetter = state => ({
 const collisionDetector = (state, { killPlayer }) => ({
 	detectCollision: tolerance => {
 		let players = state.players;
-		let collisions = [];
-		// console.log(players);
-		// console.log('=================================');
 		for (let id in players) {
 			const player1 = players[id];
 			const player1Id = id;
@@ -73,8 +70,6 @@ const collisionDetector = (state, { killPlayer }) => ({
 						size: get(player2, 'size'),
 					};
 
-					// console.log(particle1);
-					// console.log(particle2);
 					if (
 						doParticlesCollide(particle1, particle2, tolerance) &&
 						Math.abs(particle1.size - particle2.size) > 1
@@ -87,8 +82,6 @@ const collisionDetector = (state, { killPlayer }) => ({
 				}
 			}
 		}
-		return collisions;
-		// return false;
 	},
 });
 
