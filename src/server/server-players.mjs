@@ -6,18 +6,8 @@ import doParticlesCollide from './helpers/doParticlesCollide';
 
 const playerInserter = state => ({
 	insertPlayer: player => {
-		// const playerObjectPath = `players[${id}]`;
-		// const initialPlayerValues = {
-		// 	size: initialPlayerSize,
-		// 	position: {
-		// 		x: Math.ceil(Math.random() * mapBoundary.max),
-		// 		y: Math.ceil(Math.random() * mapBoundary.max),
-		// 	},
-		// 	color: getRandomArrayItem(foodColors),
-		// 	alive: true,
-		// };
-
-		player && set(state, 'players', player);
+		const playerObjectPath = `players[${player.id}]`;
+		player.id && player && set(state, playerObjectPath, player);
 	},
 });
 
@@ -69,6 +59,8 @@ const collisionDetector = (state, { killPlayer }) => ({
 						y: get(player2, 'position.y'),
 						size: get(player2, 'size'),
 					};
+					console.log(particle1.x, particle1.y);
+					console.log(particle2.x, particle2.y);
 
 					if (
 						doParticlesCollide(particle1, particle2, tolerance) &&
@@ -99,6 +91,7 @@ const PlayersFactory = () => {
 		...sizeSetter(state),
 		...sizeGetter(state),
 		...collisionDetector(state, playerKiller(state)),
+		...playerInserter(state),
 	});
 };
 

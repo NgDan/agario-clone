@@ -40,16 +40,13 @@ io.on('connection', socket => {
 	});
 
 	socket.on('player-joined', player => {
-		// players.insertPlayer(id);
-		console.log(player);
+		players.insertPlayer(player);
 	});
 
 	socket.on('player-new-pos-and-size', data => {
 		socket.broadcast.emit('broadcast', data);
 		players.movePlayer(data.id, data.position);
 		players.setSize(data.id, data.size);
-		// console.log(players.state.players);
-		// players.detectCollision(0);
 	});
 
 	socket.on('disconnect', () => {

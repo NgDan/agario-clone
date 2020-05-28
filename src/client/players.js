@@ -26,35 +26,35 @@ const remover = state => ({
 	},
 });
 
-const createCollisionDetector = (state, sk) => ({
-	playersCollisionDetector: (player, tolerance) => {
-		const players = state.players;
-		for (let id in players) {
-			const remotePlayer = players[id];
-			const particle1 = {
-				id: player.id,
-				x: player.position.x,
-				y: player.position.y,
-				size: player.size,
-			};
-			const particle2 = {
-				id: id,
-				x: remotePlayer.position.x,
-				y: remotePlayer.position.y,
-				size: remotePlayer.size,
-			};
-			if (
-				doParticlesCollide(particle1, particle2, tolerance) &&
-				Math.abs(particle1.size - particle2.size) > 30
-			) {
-				return particle1.size > particle2.size
-					? { loser: particle2.id, winner: particle1.id }
-					: { loser: particle1.id, winner: particle2.id };
-			}
-			return false;
-		}
-	},
-});
+// const createCollisionDetector = (state, sk) => ({
+// 	playersCollisionDetector: (player, tolerance) => {
+// 		const players = state.players;
+// 		for (let id in players) {
+// 			const remotePlayer = players[id];
+// 			const particle1 = {
+// 				id: player.id,
+// 				x: player.position.x,
+// 				y: player.position.y,
+// 				size: player.size,
+// 			};
+// 			const particle2 = {
+// 				id: id,
+// 				x: remotePlayer.position.x,
+// 				y: remotePlayer.position.y,
+// 				size: remotePlayer.size,
+// 			};
+// 			if (
+// 				doParticlesCollide(particle1, particle2, tolerance) &&
+// 				Math.abs(particle1.size - particle2.size) > 30
+// 			) {
+// 				return particle1.size > particle2.size
+// 					? { loser: particle2.id, winner: particle1.id }
+// 					: { loser: particle1.id, winner: particle2.id };
+// 			}
+// 			return false;
+// 		}
+// 	},
+// });
 
 const drawer = (state, sk) => ({
 	draw: translateVector => {

@@ -22,7 +22,7 @@ let s = sk => {
 			sk.food = FoodFactory();
 			sk.socket.emit('request-food');
 			sk.socket.emit('request-players');
-			sk.socket.emit('player-joined', sk.player);
+			sk.socket.emit('player-joined', sk.player.state);
 		});
 
 		sk.socket.on('request-players', () => {

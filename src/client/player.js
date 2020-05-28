@@ -65,13 +65,15 @@ export default function PlayerFactory(position, size, id) {
 					state.position.y = mapBoundary.max;
 				}
 			}
-			console.log('client obj passed to player-new-pos-and-size', {
-				id: socket.id,
-				position: state.position,
-				size: state.size,
-				color: state.color,
-				alive: state.alive,
-			});
+			// console.log('client obj passed to player-new-pos-and-size', {
+			// 	id: socket.id,
+			// 	position: state.position,
+			// 	size: state.size,
+			// 	color: state.color,
+			// 	alive: state.alive,
+			// });
+			console.log(state.id);
+			console.log(state.position);
 		},
 	});
 
