@@ -3,6 +3,7 @@ import { FoodFactory } from './client-food';
 import PlayerFactory from './player';
 import { initialPlayerPosition } from './constants';
 import io from 'socket.io-client';
+import { get } from 'lodash';
 
 let s = sk => {
 	const setup = () => {
@@ -23,16 +24,11 @@ let s = sk => {
 			sk.socket.emit('request-food');
 			sk.socket.emit('request-players');
 			sk.socket.emit('player-joined', sk.player.state);
+			console.log('player-joined: ', sk.player.state);
 		});
 
 		sk.socket.on('request-players', () => {
-			sk.socket.emit('player-new-pos-and-size', {
-				id: sk.socket.id,
-				position: sk.player.position,
-				size: sk.player.size,
-				color: sk.player.color,
-				alive: sk.player.alive,
-			});
+			sk.socket.emit('player-new-pos-and-size', get(sk, 'player.state'));
 		});
 
 		sk.socket.on('send-food', foodFromServer => {
@@ -44,6 +40,7 @@ let s = sk => {
 		});
 
 		sk.socket.on('broadcast', data => {
+			console.log('data: ', data);
 			sk.players.update(data);
 		});
 

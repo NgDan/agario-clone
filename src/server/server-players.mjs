@@ -42,7 +42,6 @@ const collisionDetector = (state, { killPlayer }) => ({
 		for (let id in players) {
 			const player1 = players[id];
 			const player1Id = id;
-			console.log(players);
 			for (const id in players) {
 				const player2 = players[id];
 				const player2Id = id;
@@ -59,8 +58,6 @@ const collisionDetector = (state, { killPlayer }) => ({
 						y: get(player2, 'position.y'),
 						size: get(player2, 'size'),
 					};
-					console.log(particle1.x, particle1.y);
-					console.log(particle2.x, particle2.y);
 
 					if (
 						doParticlesCollide(particle1, particle2, tolerance) &&
