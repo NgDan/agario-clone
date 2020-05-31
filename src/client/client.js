@@ -48,6 +48,13 @@ let s = sk => {
 			sk.players.remove(id);
 		});
 
+		// new events
+
+		sk.socket.on('new-player-position-from-server', data => {
+			console.log('new position from server: ', data);
+			// sk.players.movePlayer(data.id, data.position);
+		});
+
 		document.addEventListener('visibilitychange', () => {
 			if (document.visibilityState === 'visible') {
 				sk.socket.emit('request-players');

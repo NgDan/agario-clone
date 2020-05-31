@@ -29,6 +29,33 @@ const remover = state => ({
 	},
 });
 
+// new methods
+
+const playerKiller = state => ({
+	killPlayer: id => id && set(state, `players[${id}].alive`, false),
+});
+
+const playerRemover = state => ({
+	removePlayer: id => id && delete state.players[id],
+});
+
+const playerMover = state => ({
+	movePlayer: (id, position) =>
+		id && position && set(state, `players[${id}].position`, position),
+});
+
+const positionGetter = state => ({
+	getPosition: id => get(state, `players[${id}].position`),
+});
+
+const sizeSetter = state => ({
+	setSize: (id, size) => id && size && set(state, `players[${id}].size`, size),
+});
+
+const sizeGetter = state => ({
+	getSize: id => get(state, `players[${id}].size`),
+});
+
 const createCollisionDetector = (state, sk) => ({
 	playersCollisionDetector: (player, tolerance) => {
 		const players = state.players;
@@ -93,5 +120,11 @@ export default function PlayersConstructor(sk) {
 		...remover(state),
 		...drawer(state, sk),
 		...createCollisionDetector(state),
+		...playerKiller(state),
+		...playerRemover(state),
+		...playerMover(state),
+		...positionGetter(state),
+		...sizeSetter(state),
+		...sizeGetter(state),
 	});
 }

@@ -25,7 +25,7 @@ food.generate(200);
 
 setInterval(() => {
 	players.detectCollision(0);
-	console.log(players.state);
+	// console.log(players.state);
 }, 2000);
 
 io.on('connection', socket => {
@@ -72,6 +72,10 @@ io.on('connection', socket => {
 		food.resetFood();
 		socket.emit('send-food', food.state);
 		socket.broadcast.emit('send-food', food.state);
+	});
+
+	socket.on('new-player-position', data => {
+		socket.broadcast.emit('new-player-position-from-server', data);
 	});
 });
 

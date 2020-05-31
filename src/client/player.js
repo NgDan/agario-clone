@@ -1,6 +1,7 @@
 import { initialPlayerPosition, mapBoundary, foodColors } from './constants';
 import getRandomArrayItem from '../helpers/getRandomArrayItem';
 import { set } from 'lodash';
+import get from 'lodash/get';
 export default function PlayerFactory(position, size, id) {
 	let state = {
 		id: id,
@@ -15,6 +16,10 @@ export default function PlayerFactory(position, size, id) {
 		handleKeys: (sk, socket) => {
 			if (sk.keyIsDown(sk.LEFT_ARROW)) {
 				state.position.x = state.position.x - state.speed;
+				socket.emit('new-player-position', {
+					id: socket.id,
+					position: get(state, 'position'),
+				});
 				socket.emit('player-new-pos-and-size', {
 					id: socket.id,
 					position: state.position,
@@ -28,6 +33,10 @@ export default function PlayerFactory(position, size, id) {
 			}
 			if (sk.keyIsDown(sk.RIGHT_ARROW)) {
 				state.position.x = state.position.x + state.speed;
+				socket.emit('new-player-position', {
+					id: socket.id,
+					position: get(state, 'position'),
+				});
 				socket.emit('player-new-pos-and-size', {
 					id: socket.id,
 					position: state.position,
@@ -41,6 +50,10 @@ export default function PlayerFactory(position, size, id) {
 			}
 			if (sk.keyIsDown(sk.UP_ARROW)) {
 				state.position.y = state.position.y - state.speed;
+				socket.emit('new-player-position', {
+					id: socket.id,
+					position: get(state, 'position'),
+				});
 				socket.emit('player-new-pos-and-size', {
 					id: socket.id,
 					position: state.position,
@@ -54,6 +67,10 @@ export default function PlayerFactory(position, size, id) {
 			}
 			if (sk.keyIsDown(sk.DOWN_ARROW)) {
 				state.position.y = state.position.y + state.speed;
+				socket.emit('new-player-position', {
+					id: socket.id,
+					position: get(state, 'position'),
+				});
 				socket.emit('player-new-pos-and-size', {
 					id: socket.id,
 					position: state.position,
