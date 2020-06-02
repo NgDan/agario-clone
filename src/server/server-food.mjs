@@ -1,6 +1,7 @@
 import set from 'lodash/set';
 import { foodColors } from './constants';
 import getRandomArrayItem from './helpers/getRandomArrayItem';
+import doParticlesCollide from './helpers/doParticlesCollide';
 
 const generator = state => ({
 	generate: numberOfPieces => {
@@ -28,7 +29,41 @@ const resetter = state => ({
 		}
 	},
 });
+
+const createCollisionDetector = (
+	foodState,
+	doParticlesCollide,
+	{ deletePiece }
+) => ({
+	foodCollisionDetector: (playersState, socket) => {
+		for (let id in foodState.food) {
+			let piece = foodState.food[id];
+			for (let playerId in playersState) {
+				let player = playersState[playerId];
+				// console.log(foodState);
+				let playerProps = {
+					x: player.position.x,
+					y: player.position.y,
+					size: player.size,
+				};
+				let pieceOfFoodProps = {
+					x: piece.x,
+					y: piece.y,
+					size: foodState.foodSize,
+				};
+				if (doParticlesCollide(pieceOfFoodProps, playerProps) && piece.active) {
+					socket.broadcast.emit('piece-of-food-eaten', id);
+					deletePiece(id);
+					// console.log(foodState.food);
+					// player.updateSize(1);
+				}
+			}
+		}
+	},
+});
+
 const FoodFactory = (canvasDimensions, foodSize) => {
+	// '14681390': { x: 1468, y: 1390, color: '#ECBE7A', active: true }
 	const state = {
 		food: {},
 		foodSize: foodSize,
@@ -39,6 +74,7 @@ const FoodFactory = (canvasDimensions, foodSize) => {
 		state,
 		...generator(state),
 		...deleter(state),
+		...createCollisionDetector(state, doParticlesCollide, deleter(state)),
 		...resetter(state),
 	});
 };

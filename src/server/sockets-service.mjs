@@ -23,12 +23,14 @@ let players = PlayersFactory();
 
 food.generate(200);
 
-setInterval(() => {
-	players.detectCollision(0);
-	// console.log(players.state);
-}, 2000);
-
 io.on('connection', socket => {
+	setInterval(() => {
+		players.detectCollision(0);
+		// here we'll also need
+		// players.detectFoodCollision
+		food.foodCollisionDetector(players.state.players, socket);
+		// console.log(players.state);
+	}, 30);
 	socket.on('request-food', () => {
 		socket.emit('send-food', food.state);
 		socket.broadcast.emit('send-food', food.state);
@@ -47,6 +49,17 @@ io.on('connection', socket => {
 		socket.broadcast.emit('broadcast', data);
 		players.movePlayer(data.id, data.position);
 		players.setSize(data.id, data.size);
+	});
+
+	//will replace old position update
+	socket.on('new-player-position', data => {
+		players.movePlayer(data.id, data.position);
+	});
+
+	//will replace old size update
+	socket.on('piece-of-food-eaten', id => {
+		//this event has to be detected on the server food and dispatched to the client not viceversa
+		console.log(players.state.players);
 	});
 
 	socket.on('disconnect', () => {

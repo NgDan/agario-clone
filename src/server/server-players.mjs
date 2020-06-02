@@ -32,6 +32,20 @@ const sizeSetter = state => ({
 	setSize: (id, size) => id && size && set(state, `players[${id}].size`, size),
 });
 
+const sizeUpdater = state => ({
+	updateSize: (id, playerId, size) => {
+		console.log('id: ', id);
+		console.log(get(state, `players[${playerId}].size`));
+		// id &&
+		// 	size &&
+		// 	set(
+		// 		state,
+		// 		`players[${playerId}].size`,
+		// 		size + get(state, `players[${playerId}].size`)
+		// 	);
+	},
+});
+
 const sizeGetter = state => ({
 	getSize: id => get(state, `players[${id}].size`),
 });
@@ -85,6 +99,7 @@ const PlayersFactory = () => {
 		...playerKiller(state),
 		...playerRemover(state),
 		...positionGetter(state),
+		...sizeUpdater(state),
 		...sizeSetter(state),
 		...sizeGetter(state),
 		...collisionDetector(state, playerKiller(state)),

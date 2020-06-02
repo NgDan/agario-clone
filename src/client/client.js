@@ -36,6 +36,11 @@ let s = sk => {
 		});
 
 		sk.socket.on('piece-eaten', id => {
+			// sk.food.deletePiece(id);
+		});
+
+		// will replace old event
+		sk.socket.on('piece-of-food-eaten', id => {
 			sk.food.deletePiece(id);
 		});
 
@@ -88,14 +93,6 @@ let s = sk => {
 				sk
 			);
 			sk.food.draw(sk);
-			playerIsAlive &&
-				sk.food.foodCollisionDetector(
-					sk.player.state.position.x,
-					sk.player.state.position.y,
-					sk.player.state.size,
-					sk.player,
-					sk.socket
-				);
 			const collisionResults = sk.players.playersCollisionDetector(
 				sk.player.state,
 				0.25
