@@ -99,7 +99,7 @@ export default function PlayerFactory(position, size, id) {
 
 	const sizeUpdater = state => ({
 		updateSize: size => {
-			state.size += size;
+			set(state, 'size', size);
 		},
 	});
 

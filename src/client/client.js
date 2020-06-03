@@ -41,7 +41,12 @@ let s = sk => {
 
 		// will replace old event
 		sk.socket.on('piece-of-food-eaten', id => {
+			console.log('piece of food eaten: ', id);
 			sk.food.deletePiece(id);
+		});
+
+		sk.socket.on('new-player-size', data => {
+			sk.player.state.id === data.id && sk.player.updateSize(data.size);
 		});
 
 		sk.socket.on('broadcast', data => {
