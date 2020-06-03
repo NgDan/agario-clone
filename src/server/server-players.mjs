@@ -41,13 +41,6 @@ const sizeIncreaser = state => ({
 				`players[${playerId}].size`,
 				get(state, `players[${playerId}].size`) + size
 			);
-		// id &&
-		// 	size &&
-		// 	set(
-		// 		state,
-		// 		`players[${playerId}].size`,
-		// 		size + get(state, `players[${playerId}].size`)
-		// 	);
 	},
 });
 
