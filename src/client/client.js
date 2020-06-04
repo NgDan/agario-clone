@@ -45,6 +45,14 @@ let s = sk => {
 			sk.food.deletePiece(id);
 		});
 
+		sk.socket.on('sync-food-state', food => {
+			sk.food.syncFood(food);
+		});
+
+		sk.socket.on('sync-players-state', players => {
+			sk.players.syncPlayersState(players);
+		});
+
 		sk.socket.on('new-player-size', data => {
 			sk.player.state.id === data.id && sk.player.updateSize(data.size);
 		});

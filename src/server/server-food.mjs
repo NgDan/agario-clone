@@ -17,7 +17,6 @@ const generator = state => ({
 
 const deleter = state => ({
 	deletePiece: id => {
-		console.log('setting piece to false: ', id);
 		set(state, `food[${[id]}].active`, false);
 	},
 });
@@ -53,7 +52,6 @@ const createCollisionDetector = (
 				};
 
 				if (doParticlesCollide(pieceOfFoodProps, playerProps) && piece.active) {
-					console.log('collision: ', id);
 					deletePiece(id);
 					socket.broadcast.emit('piece-of-food-eaten', id);
 					increaseSize(playerId, 1);
@@ -68,7 +66,6 @@ const createCollisionDetector = (
 });
 
 const FoodFactory = (canvasDimensions, foodSize) => {
-	// '14681390': { x: 1468, y: 1390, color: '#ECBE7A', active: true }
 	const state = {
 		food: {},
 		foodSize: foodSize,

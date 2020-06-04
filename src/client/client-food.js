@@ -24,6 +24,12 @@ const foodSetter = state => ({
 	},
 });
 
+const foodSyncer = state => ({
+	syncFood: food => {
+		set(state, 'food', food);
+	},
+});
+
 const deleter = state => ({
 	deletePiece: id => {
 		set(state, `food[${[id]}].active`, false);
@@ -63,6 +69,7 @@ const FoodFactory = (foodSize = 10) => {
 	return Object.freeze({
 		state,
 		...foodSetter(state),
+		...foodSyncer(state),
 		...deleter(state),
 		...translater(state),
 		...createCollisionDetector(state, doParticlesCollide),

@@ -34,7 +34,14 @@ io.on('connection', socket => {
 			players.increaseSize
 		);
 		// console.log(players.state);
-	}, 2000);
+	}, 30);
+
+	setInterval(function () {
+		socket.broadcast.emit('sync-food-state', food.state.food);
+		socket.broadcast.emit('sync-players-state', players.state.players);
+		// console.log('players.state.players: ', players.state.players);
+	}, 3000);
+
 	socket.on('request-food', () => {
 		socket.emit('send-food', food.state);
 		socket.broadcast.emit('send-food', food.state);
@@ -71,11 +78,11 @@ io.on('connection', socket => {
 		players.removePlayer(socket.id);
 	});
 
-	socket.on('piece-eaten', id => {
-		console.log('piece of food eaten: ', id);
-		food.deletePiece(id);
-		socket.broadcast.emit('piece-eaten', id);
-	});
+	// socket.on('piece-eaten', id => {
+	// 	console.log('piece of food eaten: ', id);
+	// 	food.deletePiece(id);
+	// 	socket.broadcast.emit('piece-eaten', id);
+	// });
 
 	socket.on('piece-of-food-relives', () => {});
 

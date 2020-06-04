@@ -39,6 +39,13 @@ const playerRemover = state => ({
 	removePlayer: id => id && delete state.players[id],
 });
 
+const playerSyncer = state => ({
+	syncPlayersState: players => {
+		// set(state, 'players', players);
+		console.log(state);
+	},
+});
+
 const playerMover = state => ({
 	movePlayer: (id, position) =>
 		id && position && set(state, `players[${id}].position`, position),
@@ -117,6 +124,7 @@ export default function PlayersConstructor(sk) {
 	return Object.freeze({
 		state,
 		...updater(state),
+		...playerSyncer(state),
 		...remover(state),
 		...drawer(state, sk),
 		...createCollisionDetector(state),

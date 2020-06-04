@@ -75,7 +75,6 @@ const collisionDetector = (state, { killPlayer }) => ({
 						doParticlesCollide(particle1, particle2, tolerance) &&
 						Math.abs(particle1.size - particle2.size) > 1
 					) {
-						console.log('collision');
 						particle1.size > particle2.size
 							? killPlayer(particle2.id)
 							: killPlayer(particle1.id);
