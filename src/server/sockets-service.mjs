@@ -34,7 +34,6 @@ io.on('connection', socket => {
 	setInterval(function () {
 		io.emit('sync-food-state', food.state.food);
 		io.emit('sync-players-state', players.state.players);
-		// console.log('players.state.players: ', players.state.players);
 	}, 3000);
 
 	socket.on('request-food', () => {
@@ -49,6 +48,7 @@ io.on('connection', socket => {
 
 	socket.on('player-joined', player => {
 		players.insertPlayer(player);
+		io.emit('server-player-joind', player);
 	});
 
 	socket.on('player-new-pos-and-size', data => {

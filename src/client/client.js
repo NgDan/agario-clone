@@ -46,12 +46,15 @@ let s = sk => {
 			sk.food.deletePiece(id);
 		});
 
+		sk.socket.on('server-player-joind', player => {
+			console.log('new player joined:', player);
+		});
+
 		sk.socket.on('sync-food-state', food => {
 			sk.food.syncFood(food);
 		});
 
 		sk.socket.on('sync-players-state', players => {
-			console.log('syunc players: ', players);
 			sk.players.syncPlayersState(players);
 		});
 

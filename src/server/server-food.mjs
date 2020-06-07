@@ -55,7 +55,6 @@ const createCollisionDetector = (
 					deletePiece(id);
 					io.emit('piece-of-food-eaten', id);
 					increaseSize(playerId, 1);
-					console.log('new-player-size: ', playerId + '  ' + player.size);
 					io.emit('new-player-size', {
 						id: playerId,
 						size: player.size,

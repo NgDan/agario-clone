@@ -30,8 +30,6 @@ const remover = state => ({
 	},
 });
 
-// new methods
-
 const playerKiller = state => ({
 	killPlayer: id => id && set(state, `players[${id}].alive`, false),
 });
