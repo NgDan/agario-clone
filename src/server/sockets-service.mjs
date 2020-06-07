@@ -32,19 +32,19 @@ io.on('connection', socket => {
 	}, 30);
 
 	setInterval(function () {
-		socket.broadcast.emit('sync-food-state', food.state.food);
-		socket.broadcast.emit('sync-players-state', players.state.players);
+		io.emit('sync-food-state', food.state.food);
+		io.emit('sync-players-state', players.state.players);
 		// console.log('players.state.players: ', players.state.players);
 	}, 3000);
 
 	socket.on('request-food', () => {
 		socket.emit('send-food', food.state);
-		socket.broadcast.emit('send-food', food.state);
+		io.emit('send-food', food.state);
 		console.log('food requested');
 	});
 
 	socket.on('request-players', () => {
-		socket.broadcast.emit('request-players');
+		io.emit('request-players');
 	});
 
 	socket.on('player-joined', player => {
@@ -52,7 +52,7 @@ io.on('connection', socket => {
 	});
 
 	socket.on('player-new-pos-and-size', data => {
-		socket.broadcast.emit('broadcast', data);
+		// io.emit('broadcast', data);
 		// players.movePlayer(data.id, data.position);
 		// players.setSize(data.id, data.size);
 	});
@@ -69,7 +69,7 @@ io.on('connection', socket => {
 	});
 
 	socket.on('disconnect', () => {
-		socket.broadcast.emit('user-disconnected', socket.id);
+		io.emit('user-disconnected', socket.id);
 		players.removePlayer(socket.id);
 	});
 
@@ -84,13 +84,13 @@ io.on('connection', socket => {
 	socket.on('generate-food', data => {
 		food.generate(200);
 		socket.emit('send-food', food);
-		socket.broadcast.emit('send-food', food);
+		io.emit('send-food', food);
 	});
 
 	socket.on('reset-food', data => {
 		food.resetFood();
 		socket.emit('send-food', food.state);
-		socket.broadcast.emit('send-food', food.state);
+		io.emit('send-food', food.state);
 	});
 
 	socket.on('new-player-position', data => {
