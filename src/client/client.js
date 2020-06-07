@@ -28,10 +28,6 @@ let s = sk => {
 			console.log('player-joined: ', sk.player.state);
 		});
 
-		sk.socket.on('request-players', () => {
-			sk.socket.emit('player-new-pos-and-size', get(sk, 'player.state'));
-		});
-
 		sk.socket.on('send-food', foodFromServer => {
 			sk.food.setFood(foodFromServer.food, foodFromServer.foodSize);
 		});
@@ -56,6 +52,9 @@ let s = sk => {
 
 		sk.socket.on('sync-players-state', players => {
 			sk.players.syncPlayersState(players);
+			//sync player state
+			sk.player.syncPlayer(players[sk.socket.id]);
+			console.log('self: ', players[sk.socket.id]);
 		});
 
 		sk.socket.on('new-player-size', data => {
@@ -74,8 +73,7 @@ let s = sk => {
 		// new events
 
 		sk.socket.on('new-player-position-from-server', data => {
-			console.log('new position from server: ', data);
-			// sk.players.movePlayer(data.id, data.position);
+			sk.players.movePlayer(data.id, data.position);
 		});
 
 		document.addEventListener('visibilitychange', () => {

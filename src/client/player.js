@@ -20,13 +20,7 @@ export default function PlayerFactory(position, size, id) {
 					id: socket.id,
 					position: get(state, 'position'),
 				});
-				socket.emit('player-new-pos-and-size', {
-					id: socket.id,
-					position: state.position,
-					size: state.size,
-					color: state.color,
-					alive: state.alive,
-				});
+
 				if (state.position.x < mapBoundary.min) {
 					state.position.x = mapBoundary.min;
 				}
@@ -37,13 +31,7 @@ export default function PlayerFactory(position, size, id) {
 					id: socket.id,
 					position: get(state, 'position'),
 				});
-				socket.emit('player-new-pos-and-size', {
-					id: socket.id,
-					position: state.position,
-					size: state.size,
-					color: state.color,
-					alive: state.alive,
-				});
+
 				if (state.position.x > mapBoundary.max) {
 					state.position.x = mapBoundary.max;
 				}
@@ -54,13 +42,7 @@ export default function PlayerFactory(position, size, id) {
 					id: socket.id,
 					position: get(state, 'position'),
 				});
-				socket.emit('player-new-pos-and-size', {
-					id: socket.id,
-					position: state.position,
-					size: state.size,
-					color: state.color,
-					alive: state.alive,
-				});
+
 				if (state.position.y < mapBoundary.min) {
 					state.position.y = mapBoundary.min;
 				}
@@ -71,13 +53,7 @@ export default function PlayerFactory(position, size, id) {
 					id: socket.id,
 					position: get(state, 'position'),
 				});
-				socket.emit('player-new-pos-and-size', {
-					id: socket.id,
-					position: state.position,
-					size: state.size,
-					color: state.color,
-					alive: state.alive,
-				});
+
 				if (state.position.y > mapBoundary.max) {
 					state.position.y = mapBoundary.max;
 				}
@@ -103,6 +79,10 @@ export default function PlayerFactory(position, size, id) {
 		},
 	});
 
+	const playerSyncer = state => ({
+		syncPlayer: player => (state = player),
+	});
+
 	const drawer = state => ({
 		draw: sk => {
 			if (state.alive) {
@@ -125,5 +105,6 @@ export default function PlayerFactory(position, size, id) {
 		...sizeUpdater(state),
 		...drawer(state),
 		...killer(state),
+		...playerSyncer(state),
 	});
 }

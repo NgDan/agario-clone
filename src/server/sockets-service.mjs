@@ -26,8 +26,6 @@ food.generate(200);
 io.on('connection', socket => {
 	setInterval(function () {
 		players.detectCollision(0);
-		// here we'll also need
-		// players.detectFoodCollision
 		food.foodCollisionDetector(players.state.players, io, players.increaseSize);
 	}, 30);
 
@@ -39,7 +37,6 @@ io.on('connection', socket => {
 	socket.on('request-food', () => {
 		socket.emit('send-food', food.state);
 		io.emit('send-food', food.state);
-		console.log('food requested');
 	});
 
 	socket.on('request-players', () => {
@@ -51,33 +48,15 @@ io.on('connection', socket => {
 		io.emit('server-player-joind', player);
 	});
 
-	socket.on('player-new-pos-and-size', data => {
-		// io.emit('broadcast', data);
-		// players.movePlayer(data.id, data.position);
-		// players.setSize(data.id, data.size);
-	});
-
-	//will replace old position update
 	socket.on('new-player-position', data => {
 		players.movePlayer(data.id, data.position);
-	});
-
-	//will replace old size update
-	socket.on('piece-of-food-eaten', id => {
-		//this event has to be detected on the server food and dispatched to the client not viceversa
-		// console.log(players.state.players);
+		io.emit('new-player-position-from-server', data);
 	});
 
 	socket.on('disconnect', () => {
 		io.emit('user-disconnected', socket.id);
 		players.removePlayer(socket.id);
 	});
-
-	// socket.on('piece-eaten', id => {
-	// 	console.log('piece of food eaten: ', id);
-	// 	food.deletePiece(id);
-	// 	socket.broadcast.emit('piece-eaten', id);
-	// });
 
 	socket.on('piece-of-food-relives', () => {});
 
@@ -91,12 +70,6 @@ io.on('connection', socket => {
 		food.resetFood();
 		socket.emit('send-food', food.state);
 		io.emit('send-food', food.state);
-	});
-
-	socket.on('new-player-position', data => {
-		console.log('new-player-position form client: ', data);
-		io.emit('new-player-position-from-server', data);
-		players.movePlayer(data.id, data.position);
 	});
 });
 

@@ -3,7 +3,6 @@ import doParticlesCollide from '../helpers/doParticlesCollide';
 
 const createCollisionDetector = (state, doParticlesCollide) => ({
 	foodCollisionDetector: (x, y, size, player, socket) => {
-		// console.log('client state.food: ', state.food);
 		for (let id in state.food) {
 			let piece = state.food[id];
 			let playerProps = { x: piece.x, y: piece.y, size: size };

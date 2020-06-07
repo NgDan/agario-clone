@@ -1,28 +1,5 @@
 import { set, get } from 'lodash';
 import doParticlesCollide from '../helpers/doParticlesCollide';
-import { composeP } from 'ramda';
-
-const updater = state => {
-	return {
-		update: ({ id, position, size, color, alive }) => {
-			if (id) {
-				state.players[id] = { ...state.players[id], id: id };
-			}
-			if (position) {
-				state.players[id] = { ...state.players[id], position: position };
-			}
-			if (size) {
-				state.players[id] = { ...state.players[id], size: size };
-			}
-			if (color) {
-				state.players[id] = { ...state.players[id], color: color };
-			}
-			if (alive) {
-				state.players[id] = { ...state.players[id], alive: alive };
-			}
-		},
-	};
-};
 
 const remover = state => ({
 	remove: id => {
@@ -100,6 +77,7 @@ const drawer = (state, sk) => ({
 		if (Object.entries(players).length > 0) {
 			for (const id of Object.keys(players)) {
 				const player = players[id];
+				console.log('player alive: ', player.alive);
 				if (player.alive && sk.socket.id !== player.id) {
 					sk.push();
 					sk.fill(player.color);
@@ -121,7 +99,6 @@ export default function PlayersConstructor(sk) {
 
 	return Object.freeze({
 		state,
-		...updater(state),
 		...playerSyncer(state),
 		...remover(state),
 		...drawer(state, sk),
