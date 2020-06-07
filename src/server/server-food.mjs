@@ -35,7 +35,7 @@ const createCollisionDetector = (
 	doParticlesCollide,
 	{ deletePiece }
 ) => ({
-	foodCollisionDetector: (playersState, socket, increaseSize) => {
+	foodCollisionDetector: (playersState, io, increaseSize) => {
 		for (let id in foodState.food) {
 			let piece = foodState.food[id];
 			for (let playerId in playersState) {
@@ -53,9 +53,10 @@ const createCollisionDetector = (
 
 				if (doParticlesCollide(pieceOfFoodProps, playerProps) && piece.active) {
 					deletePiece(id);
-					socket.broadcast.emit('piece-of-food-eaten', id);
+					io.emit('piece-of-food-eaten', id);
 					increaseSize(playerId, 1);
-					socket.broadcast.emit('new-player-size', {
+					console.log('new-player-size: ', playerId + '  ' + player.size);
+					io.emit('new-player-size', {
 						id: playerId,
 						size: player.size,
 					});

@@ -1,5 +1,6 @@
 import { set, get } from 'lodash';
 import doParticlesCollide from '../helpers/doParticlesCollide';
+import { composeP } from 'ramda';
 
 const updater = state => {
 	return {
@@ -41,8 +42,7 @@ const playerRemover = state => ({
 
 const playerSyncer = state => ({
 	syncPlayersState: players => {
-		// set(state, 'players', players);
-		console.log(state);
+		set(state, 'players', players);
 	},
 });
 
@@ -102,7 +102,7 @@ const drawer = (state, sk) => ({
 		if (Object.entries(players).length > 0) {
 			for (const id of Object.keys(players)) {
 				const player = players[id];
-				if (player.alive) {
+				if (player.alive && sk.socket.id !== player.id) {
 					sk.push();
 					sk.fill(player.color);
 					sk.noStroke();

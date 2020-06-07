@@ -7,6 +7,7 @@ import { get } from 'lodash';
 
 let s = sk => {
 	const setup = () => {
+		sk.io = io;
 		sk.socket = io();
 		sk.frameRate(60);
 		sk.createCanvas(800, 600);
@@ -50,15 +51,16 @@ let s = sk => {
 		});
 
 		sk.socket.on('sync-players-state', players => {
+			console.log('syunc players: ', players);
 			sk.players.syncPlayersState(players);
 		});
 
 		sk.socket.on('new-player-size', data => {
+			// console.log('data from new-player-size event: ', data);
 			sk.player.state.id === data.id && sk.player.updateSize(data.size);
 		});
 
 		sk.socket.on('broadcast', data => {
-			console.log('data: ', data);
 			sk.players.update(data);
 		});
 
