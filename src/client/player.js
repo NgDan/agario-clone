@@ -68,7 +68,7 @@ export default function PlayerFactory(position, size, id) {
 	});
 
 	const killer = state => ({
-		kill: socket => {
+		kill: () => {
 			set(state, 'alive', false);
 		},
 	});

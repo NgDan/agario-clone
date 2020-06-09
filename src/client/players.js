@@ -77,7 +77,7 @@ const drawer = (state, sk) => ({
 		if (Object.entries(players).length > 0) {
 			for (const id of Object.keys(players)) {
 				const player = players[id];
-				console.log('player alive: ', player.alive);
+
 				if (player.alive && sk.socket.id !== player.id) {
 					sk.push();
 					sk.fill(player.color);

@@ -54,13 +54,17 @@ let s = sk => {
 			sk.players.syncPlayersState(players);
 			//sync player state
 			sk.player.syncPlayer(players[sk.socket.id]);
-			console.log('self: ', players[sk.socket.id]);
 		});
 
 		sk.socket.on('new-player-size', data => {
 			// console.log('data from new-player-size event: ', data);
 			sk.player.state.id === data.id && sk.player.updateSize(data.size);
 		});
+
+		sk.socket.on(
+			'player-killed',
+			id => sk.player.state.id === id && sk.player.kill(id)
+		);
 
 		sk.socket.on('broadcast', data => {
 			sk.players.update(data);
