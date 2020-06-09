@@ -80,10 +80,8 @@ const collisionDetector = (state, { killPlayer }) => ({
 					) {
 						if (particle1.size > particle2.size) {
 							killPlayer(particle2.id);
-							io.emit('player-killed', particle2.id);
 						} else {
 							killPlayer(particle1.id);
-							io.emit('player-killed', particle1.id);
 						}
 					}
 				}

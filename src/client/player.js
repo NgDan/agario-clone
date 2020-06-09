@@ -80,7 +80,9 @@ export default function PlayerFactory(position, size, id) {
 	});
 
 	const playerSyncer = state => ({
-		syncPlayer: player => (state = player),
+		syncPlayer: player => {
+			set(state, 'alive', get(player, 'alive'));
+		},
 	});
 
 	const drawer = state => ({

@@ -61,11 +61,6 @@ let s = sk => {
 			sk.player.state.id === data.id && sk.player.updateSize(data.size);
 		});
 
-		sk.socket.on(
-			'player-killed',
-			id => sk.player.state.id === id && sk.player.kill(id)
-		);
-
 		sk.socket.on('broadcast', data => {
 			sk.players.update(data);
 		});
