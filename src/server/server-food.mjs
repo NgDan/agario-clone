@@ -18,6 +18,9 @@ const generator = state => ({
 const deleter = state => ({
 	deletePiece: id => {
 		set(state, `food[${[id]}].active`, false);
+		setTimeout(() => {
+			set(state, `food[${[id]}].active`, true);
+		}, Math.floor(8000 + Math.random() * 6000));
 	},
 });
 

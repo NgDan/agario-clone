@@ -27,9 +27,12 @@ io.on('connection', socket => {
 	setInterval(function () {
 		players.detectCollision(0, io);
 		food.foodCollisionDetector(players.state.players, io, players.increaseSize);
+	}, 30);
+
+	setInterval(function () {
 		io.emit('sync-food-state', food.state.food);
 		io.emit('sync-players-state', players.state.players);
-	}, 30);
+	}, 3000);
 
 	socket.on('request-food', () => {
 		socket.emit('send-food', food.state);
@@ -69,16 +72,6 @@ io.on('connection', socket => {
 		io.emit('send-food', food.state);
 	});
 });
-
-// EVENTS
-// piece of food eaten *
-// piece of food relives (send from collision detector)
-// new client position - sent by client to server (payload is ID and new position)
-// player moved (payload is ID and new position)
-// player died - server detects it and sends id to client (payload is ID)
-// player increase size - server detects it and sends id to client
-// broadcast food object - server sends whole food object to client (try to avoid too many of these since the payload will be very heavy)
-// broadcast players object`
 
 httpServer.listen(3000, () => {
 	console.log('listening on *:3000');
