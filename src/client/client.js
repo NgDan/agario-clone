@@ -32,10 +32,6 @@ let s = sk => {
 			sk.food.setFood(foodFromServer.food, foodFromServer.foodSize);
 		});
 
-		sk.socket.on('piece-eaten', id => {
-			// sk.food.deletePiece(id);
-		});
-
 		// will replace old event
 		sk.socket.on('piece-of-food-eaten', id => {
 			console.log('piece of food eaten: ', id);
@@ -57,7 +53,6 @@ let s = sk => {
 		});
 
 		sk.socket.on('new-player-size', data => {
-			// console.log('data from new-player-size event: ', data);
 			sk.player.state.id === data.id && sk.player.updateSize(data.size);
 		});
 
@@ -87,9 +82,7 @@ let s = sk => {
 		});
 	};
 
-	// TODO: make translate func reusable
 	// DO measurements to get an idea of the bandwidth used when playing
-	// implement "eat player functionality"
 	// zoom out when player grows
 
 	const draw = () => {
@@ -108,18 +101,6 @@ let s = sk => {
 				sk
 			);
 			sk.food.draw(sk);
-			const collisionResults = sk.players.playersCollisionDetector(
-				sk.player.state,
-				0.25
-			);
-			if (collisionResults && collisionResults.loser === sk.player.state.id) {
-				sk.player.kill();
-			}
-			if (collisionResults && collisionResults.winner === sk.player.state.id) {
-				const loser = sk.players.state.players[collisionResults.loser];
-				sk.player.updateSize(loser.size);
-			}
-			collisionResults && sk.players.remove(collisionResults.loser);
 		}
 	};
 	sk.setup = setup;

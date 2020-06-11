@@ -34,13 +34,11 @@ const sizeSetter = state => ({
 
 const sizeIncreaser = state => ({
 	increaseSize: (playerId, size) => {
-		playerId &&
-			size &&
-			set(
-				state,
-				`players[${playerId}].size`,
-				get(state, `players[${playerId}].size`) + size
-			);
+		const sizeIncrease = Math.round(Math.sqrt(size));
+		const actualSize = get(state, `players[${playerId}].size`);
+		const newSize = actualSize + sizeIncrease;
+		playerId && size && set(state, `players[${playerId}].size`, newSize);
+		return newSize || actualSize;
 	},
 });
 
@@ -48,7 +46,7 @@ const sizeGetter = state => ({
 	getSize: id => get(state, `players[${id}].size`),
 });
 
-const collisionDetector = (state, { killPlayer }) => ({
+const collisionDetector = (state, { killPlayer }, { increaseSize }) => ({
 	detectCollision: (tolerance, io) => {
 		let players = state.players;
 		for (let id in players) {
@@ -80,8 +78,14 @@ const collisionDetector = (state, { killPlayer }) => ({
 					) {
 						if (particle1.size > particle2.size) {
 							killPlayer(particle2.id);
+							const newSize = increaseSize(particle1.id, particle2.size);
+							console.log('newSize: ', newSize);
+							io.emit('new-player-size', { id: particle1.id, size: newSize });
 						} else {
 							killPlayer(particle1.id);
+							const newSize = increaseSize(particle2.id, particle1.size);
+							console.log('newSize: ', newSize);
+							io.emit('new-player-size', { id: particle2.id, size: newSize });
 						}
 					}
 				}
@@ -104,7 +108,7 @@ const PlayersFactory = () => {
 		...sizeIncreaser(state),
 		...sizeSetter(state),
 		...sizeGetter(state),
-		...collisionDetector(state, playerKiller(state)),
+		...collisionDetector(state, playerKiller(state), sizeIncreaser(state)),
 		...playerInserter(state),
 	});
 };

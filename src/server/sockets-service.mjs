@@ -27,12 +27,9 @@ io.on('connection', socket => {
 	setInterval(function () {
 		players.detectCollision(0, io);
 		food.foodCollisionDetector(players.state.players, io, players.increaseSize);
-	}, 30);
-
-	setInterval(function () {
 		io.emit('sync-food-state', food.state.food);
 		io.emit('sync-players-state', players.state.players);
-	}, 3000);
+	}, 30);
 
 	socket.on('request-food', () => {
 		socket.emit('send-food', food.state);
