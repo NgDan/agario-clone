@@ -1,7 +1,7 @@
 import { initialPlayerPosition, mapBoundary, foodColors } from './constants';
 import getRandomArrayItem from '../helpers/getRandomArrayItem';
 import { set, get } from 'lodash';
-export default function PlayerFactory(position, size, id) {
+export default function PlayerFactory(position, size, id, sk, socket) {
 	let state = {
 		id: id,
 		size: size,
@@ -11,8 +11,8 @@ export default function PlayerFactory(position, size, id) {
 		alive: true,
 	};
 
-	const keyHandler = state => ({
-		handleKeys: (sk, socket) => {
+	const keyHandler = (state, sk, socket) => ({
+		handleKeys: () => {
 			if (sk.keyIsDown(sk.LEFT_ARROW)) {
 				state.position.x = state.position.x - state.speed;
 				socket.emit('new-player-position', {
@@ -101,7 +101,7 @@ export default function PlayerFactory(position, size, id) {
 
 	return Object.freeze({
 		state,
-		...keyHandler(state),
+		...keyHandler(state, sk, socket),
 		...positionUpdater(state),
 		...sizeUpdater(state),
 		...drawer(state),

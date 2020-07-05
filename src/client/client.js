@@ -3,7 +3,6 @@ import { FoodFactory } from './client-food';
 import PlayerFactory from './player';
 import { initialPlayerPosition } from './constants';
 import io from 'socket.io-client';
-import { get } from 'lodash';
 
 let s = sk => {
 	const setup = () => {
@@ -16,7 +15,9 @@ let s = sk => {
 			sk.player = PlayerFactory(
 				{ x: initialPlayerPosition.x, y: initialPlayerPosition.y },
 				80,
-				sk.socket.id
+				sk.socket.id,
+				sk,
+				sk.socket
 			);
 			console.log('connected');
 			sk.players = PlayersConstructor(sk);
