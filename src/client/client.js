@@ -83,9 +83,6 @@ let s = sk => {
 		});
 	};
 
-	// DO measurements to get an idea of the bandwidth used when playing
-	// zoom out when player grows
-
 	const draw = () => {
 		if (sk.players && sk.player) {
 			const playerIsAlive = sk.player.state.alive;
