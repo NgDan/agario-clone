@@ -36,9 +36,10 @@ const resetter = state => ({
 const createCollisionDetector = (
 	foodState,
 	doParticlesCollide,
-	{ deletePiece }
+	{ deletePiece },
+	io
 ) => ({
-	foodCollisionDetector: (playersState, io, increaseSize) => {
+	foodCollisionDetector: (playersState, increaseSize) => {
 		for (let id in foodState.food) {
 			let piece = foodState.food[id];
 			for (let playerId in playersState) {
@@ -68,7 +69,7 @@ const createCollisionDetector = (
 	},
 });
 
-const FoodFactory = (canvasDimensions, foodSize) => {
+const FoodFactory = (canvasDimensions, foodSize, io) => {
 	const state = {
 		food: {},
 		foodSize: foodSize,
@@ -79,7 +80,7 @@ const FoodFactory = (canvasDimensions, foodSize) => {
 		state,
 		...generator(state),
 		...deleter(state),
-		...createCollisionDetector(state, doParticlesCollide, deleter(state)),
+		...createCollisionDetector(state, doParticlesCollide, deleter(state), io),
 		...resetter(state),
 	});
 };

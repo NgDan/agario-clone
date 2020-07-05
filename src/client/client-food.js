@@ -1,20 +1,4 @@
 import { set } from 'lodash';
-import doParticlesCollide from '../helpers/doParticlesCollide';
-
-const createCollisionDetector = (state, doParticlesCollide) => ({
-	foodCollisionDetector: (x, y, size, player, socket) => {
-		for (let id in state.food) {
-			let piece = state.food[id];
-			let playerProps = { x: piece.x, y: piece.y, size: size };
-			let pieceOfFoodProps = { x: x, y: y, size: state.foodSize };
-			if (doParticlesCollide(pieceOfFoodProps, playerProps) && piece.active) {
-				socket.emit('piece-eaten', id);
-				set(piece, 'active', false);
-				player.updateSize(1);
-			}
-		}
-	},
-});
 
 const foodSetter = state => ({
 	setFood: (food, foodSize) => {
@@ -35,8 +19,8 @@ const deleter = state => ({
 	},
 });
 
-const translater = state => ({
-	translateFood: (x, y, sk) => {
+const translater = (state, sk) => ({
+	translateFood: (x, y) => {
 		state.translateVector.x = -x;
 		state.translateVector.y = -y;
 		sk.translate(state.translateVector.x, state.translateVector.y);
@@ -58,7 +42,7 @@ const drawer = state => ({
 	},
 });
 
-const FoodFactory = (foodSize = 10) => {
+const FoodFactory = (foodSize = 10, sk) => {
 	const state = {
 		food: [],
 		foodSize: foodSize,
@@ -70,8 +54,7 @@ const FoodFactory = (foodSize = 10) => {
 		...foodSetter(state),
 		...foodSyncer(state),
 		...deleter(state),
-		...translater(state),
-		...createCollisionDetector(state, doParticlesCollide),
+		...translater(state, sk),
 		...drawer(state),
 	});
 };

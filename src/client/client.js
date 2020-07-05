@@ -21,7 +21,7 @@ let s = sk => {
 			console.log('connected');
 			sk.players = PlayersConstructor(sk);
 
-			sk.food = FoodFactory();
+			sk.food = FoodFactory(10, sk);
 			sk.socket.emit('request-food');
 			sk.socket.emit('request-players');
 			sk.socket.emit('player-joined', sk.player.state);

@@ -46,8 +46,8 @@ const sizeGetter = state => ({
 	getSize: id => get(state, `players[${id}].size`),
 });
 
-const collisionDetector = (state, { killPlayer }, { increaseSize }) => ({
-	detectCollision: (tolerance, io) => {
+const collisionDetector = (state, { killPlayer }, { increaseSize }, io) => ({
+	detectCollision: tolerance => {
 		let players = state.players;
 		for (let id in players) {
 			const player1 = players[id];
@@ -94,7 +94,7 @@ const collisionDetector = (state, { killPlayer }, { increaseSize }) => ({
 	},
 });
 
-const PlayersFactory = () => {
+const PlayersFactory = io => {
 	const state = {
 		players: {},
 	};
@@ -108,7 +108,7 @@ const PlayersFactory = () => {
 		...sizeIncreaser(state),
 		...sizeSetter(state),
 		...sizeGetter(state),
-		...collisionDetector(state, playerKiller(state), sizeIncreaser(state)),
+		...collisionDetector(state, playerKiller(state), sizeIncreaser(state), io),
 		...playerInserter(state),
 	});
 };

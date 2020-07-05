@@ -16,17 +16,18 @@ app.use(express.static('../client'));
 
 let food = FoodFactory(
 	{ x: mapBoundary.max, y: mapBoundary.max },
-	initialPlayerSize
+	initialPlayerSize,
+	io
 );
 
-let players = PlayersFactory();
+let players = PlayersFactory(io);
 
 food.generate(200);
 
 io.on('connection', socket => {
 	setInterval(function () {
-		players.detectCollision(0, io);
-		food.foodCollisionDetector(players.state.players, io, players.increaseSize);
+		players.detectCollision(0);
+		food.foodCollisionDetector(players.state.players, players.increaseSize);
 	}, 30);
 
 	setInterval(function () {
