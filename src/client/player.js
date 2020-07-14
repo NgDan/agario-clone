@@ -13,6 +13,7 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 
 	const keyHandler = (state, sk, socket) => ({
 		handleKeys: () => {
+			console.log('size: ', state.size);
 			if (sk.keyIsDown(sk.LEFT_ARROW)) {
 				state.position.x = state.position.x - state.speed;
 				socket.emit('new-player-position', {

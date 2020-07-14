@@ -34,8 +34,9 @@ const sizeSetter = state => ({
 
 const sizeIncreaser = state => ({
 	increaseSize: (playerId, size) => {
-		const sizeIncrease = Math.round(Math.sqrt(size));
 		const actualSize = get(state, `players[${playerId}].size`);
+		if (actualSize > 650) return 650;
+		const sizeIncrease = Math.round(Math.sqrt(size));
 		const newSize = actualSize + sizeIncrease;
 		playerId && size && set(state, `players[${playerId}].size`, newSize);
 		return newSize || actualSize;

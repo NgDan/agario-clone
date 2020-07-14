@@ -6,10 +6,12 @@ import io from 'socket.io-client';
 
 let s = sk => {
 	const setup = () => {
+		sk.height = 600;
+		sk.width = 800;
 		sk.io = io;
 		sk.socket = io();
 		sk.frameRate(60);
-		sk.createCanvas(800, 600);
+		sk.createCanvas(sk.width, sk.height, sk.WEBGL);
 
 		sk.socket.on('connect', () => {
 			sk.player = PlayerFactory(
@@ -84,6 +86,20 @@ let s = sk => {
 	};
 
 	const draw = () => {
+		let zoomOut = 100;
+		sk.camera(
+			sk.width,
+			sk.height,
+			sk.player.state.size + sk.height / 2 / sk.tan((sk.PI * 30.0) / 180.0),
+			sk.width,
+			sk.height,
+			0,
+			0,
+			1,
+			0
+		);
+		// sk.plane(10, 10);
+		// sk.translate;
 		if (sk.players && sk.player) {
 			const playerIsAlive = sk.player.state.alive;
 			sk.background(100);
