@@ -82,11 +82,13 @@ const collisionDetector = (state, { killPlayer }, { increaseSize }, io) => ({
 							const newSize = increaseSize(particle1.id, particle2.size);
 							console.log('newSize: ', newSize);
 							io.emit('new-player-size', { id: particle1.id, size: newSize });
+							io.emit('player-has-been-killed', particle2.id);
 						} else {
 							killPlayer(particle1.id);
 							const newSize = increaseSize(particle2.id, particle1.size);
 							console.log('newSize: ', newSize);
 							io.emit('new-player-size', { id: particle2.id, size: newSize });
+							io.emit('player-has-been-killed', particle1.id);
 						}
 					}
 				}

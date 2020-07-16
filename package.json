@@ -6,6 +6,7 @@
 	"scripts": {
 		"start": "cd src/server && nodemon -r esm sockets-service.mjs",
 		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "npx webpack",
 		"build:watch": "npx webpack --watch"
 	},
 	"repository": {

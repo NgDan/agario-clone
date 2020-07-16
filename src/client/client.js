@@ -73,6 +73,11 @@ let s = sk => {
 			sk.players.movePlayer(data.id, data.position);
 		});
 
+		sk.socket.on('player-has-been-killed', id => {
+			console.log('player-has-been-killed: ', id);
+			sk.players.killPlayer(id);
+		});
+
 		document.addEventListener('visibilitychange', () => {
 			if (document.visibilityState === 'visible') {
 				sk.socket.emit('request-players');
@@ -86,21 +91,21 @@ let s = sk => {
 	};
 
 	const draw = () => {
-		let zoomOut = 100;
-		sk.camera(
-			sk.width,
-			sk.height,
-			sk.player.state.size + sk.height / 2 / sk.tan((sk.PI * 30.0) / 180.0),
-			sk.width,
-			sk.height,
-			0,
-			0,
-			1,
-			0
-		);
+		// let zoomOut = 100;
 		// sk.plane(10, 10);
 		// sk.translate;
 		if (sk.players && sk.player) {
+			sk.camera(
+				sk.width,
+				sk.height,
+				sk.player.state.size + sk.height / 2 / sk.tan((sk.PI * 30.0) / 180.0),
+				sk.width,
+				sk.height,
+				0,
+				0,
+				1,
+				0
+			);
 			const playerIsAlive = sk.player.state.alive;
 			sk.background(100);
 			sk.player.draw(sk);

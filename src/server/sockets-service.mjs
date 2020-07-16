@@ -26,7 +26,7 @@ food.generate(200);
 
 io.on('connection', socket => {
 	setInterval(function () {
-		players.detectCollision(0);
+		players.detectCollision(0.2);
 		food.foodCollisionDetector(players.state.players, players.increaseSize);
 	}, 30);
 
