@@ -22,12 +22,11 @@ let players = PlayersFactory(io);
 food.generate(200);
 
 io.on('connection', socket => {
-	setInterval(function () {
+	const collisionDetectorInterval = setInterval(function () {
 		players.detectCollision(0.2);
 		food.foodCollisionDetector(players.state.players, players.increaseSize);
 	}, 30);
-
-	setInterval(function () {
+	const stateSyncInterval = setInterval(function () {
 		io.emit('sync-food-state', food.state.food);
 		io.emit('sync-players-state', players.state.players);
 	}, 3000);
@@ -54,6 +53,8 @@ io.on('connection', socket => {
 	socket.on('disconnect', () => {
 		io.emit('user-disconnected', socket.id);
 		players.removePlayer(socket.id);
+		clearInterval(collisionDetectorInterval);
+		clearInterval(stateSyncInterval);
 	});
 
 	socket.on('piece-of-food-relives', () => {});
