@@ -22,15 +22,6 @@ let players = PlayersFactory(io);
 food.generate(200);
 
 io.on('connection', socket => {
-	const collisionDetectorInterval = setInterval(function () {
-		players.detectCollision(0.2);
-		food.foodCollisionDetector(players.state.players, players.increaseSize);
-	}, 30);
-	const stateSyncInterval = setInterval(function () {
-		io.emit('sync-food-state', food.state.food);
-		io.emit('sync-players-state', players.state.players);
-	}, 3000);
-
 	socket.on('request-food', () => {
 		socket.emit('send-food', food.state);
 		io.emit('send-food', food.state);
@@ -53,8 +44,8 @@ io.on('connection', socket => {
 	socket.on('disconnect', () => {
 		io.emit('user-disconnected', socket.id);
 		players.removePlayer(socket.id);
-		clearInterval(collisionDetectorInterval);
-		clearInterval(stateSyncInterval);
+		// clearInterval(collisionDetectorInterval);
+		// clearInterval(stateSyncInterval);
 	});
 
 	socket.on('piece-of-food-relives', () => {});
@@ -71,6 +62,14 @@ io.on('connection', socket => {
 		io.emit('send-food', food.state);
 	});
 });
+const collisionDetectorInterval = setInterval(function () {
+	players.detectCollision(0.2);
+	food.foodCollisionDetector(players.state.players, players.increaseSize);
+}, 30);
+const stateSyncInterval = setInterval(function () {
+	io.emit('sync-food-state', food.state.food);
+	io.emit('sync-players-state', players.state.players);
+}, 3000);
 
 httpServer.listen(3000, () => {
 	console.log('listening on *:3000');
