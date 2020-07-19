@@ -44,8 +44,6 @@ io.on('connection', socket => {
 	socket.on('disconnect', () => {
 		io.emit('user-disconnected', socket.id);
 		players.removePlayer(socket.id);
-		// clearInterval(collisionDetectorInterval);
-		// clearInterval(stateSyncInterval);
 	});
 
 	socket.on('piece-of-food-relives', () => {});
@@ -62,10 +60,14 @@ io.on('connection', socket => {
 		io.emit('send-food', food.state);
 	});
 });
+
 const collisionDetectorInterval = setInterval(function () {
+	// console.time('collision loop: ');
 	players.detectCollision(0.2);
 	food.foodCollisionDetector(players.state.players, players.increaseSize);
-}, 30);
+	// console.timeEnd('collision loop: ');
+}, 10);
+
 const stateSyncInterval = setInterval(function () {
 	io.emit('sync-food-state', food.state.food);
 	io.emit('sync-players-state', players.state.players);

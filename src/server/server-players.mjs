@@ -1,7 +1,5 @@
 import set from 'lodash/set';
 import get from 'lodash/get';
-import { initialPlayerSize, mapBoundary, foodColors } from './constants';
-import getRandomArrayItem from './helpers/getRandomArrayItem';
 import doParticlesCollide from './helpers/doParticlesCollide';
 
 const playerInserter = state => ({
@@ -72,9 +70,9 @@ const collisionDetector = (state, { killPlayer }, { increaseSize }, io) => ({
 						alive: get(player2, 'alive'),
 					};
 					if (
-						doParticlesCollide(particle1, particle2, tolerance) &&
 						get(player1, 'alive') &&
 						get(player2, 'alive') &&
+						doParticlesCollide(particle1, particle2, tolerance) &&
 						Math.abs(particle1.size - particle2.size) > 1
 					) {
 						if (particle1.size > particle2.size) {
