@@ -5,6 +5,14 @@ import { initialPlayerPosition } from './constants';
 import io from 'socket.io-client';
 
 let s = sk => {
+	let overlay;
+	let checkExist = setInterval(() => {
+		if (document.querySelector('.overlay')) {
+			console.log('Exists!');
+			overlay = document.querySelector('.overlay');
+			clearInterval(checkExist);
+		}
+	}, 100);
 	const setup = () => {
 		sk.height = 600;
 		sk.width = 800;
@@ -84,10 +92,17 @@ let s = sk => {
 			}
 		});
 
-		//temporary for development purposes
-		document.querySelector('.request-food').addEventListener('click', food => {
-			sk.socket.emit('reset-food');
+		// temporary for development purposes
+		document.querySelector('.add-overlay').addEventListener('click', food => {
+			// sk.socket.emit('reset-food');
+			console.log((overlay.style.display = 'flex'));
 		});
+		document
+			.querySelector('.remove-overlay')
+			.addEventListener('click', food => {
+				// sk.socket.emit('reset-food');
+				console.log((overlay.style.display = 'none'));
+			});
 	};
 
 	const draw = () => {

@@ -62,10 +62,8 @@ io.on('connection', socket => {
 });
 
 const collisionDetectorInterval = setInterval(function () {
-	// console.time('collision loop: ');
 	players.detectCollision(0.2);
 	food.foodCollisionDetector(players.state.players, players.increaseSize);
-	// console.timeEnd('collision loop: ');
 }, 10);
 
 const stateSyncInterval = setInterval(function () {

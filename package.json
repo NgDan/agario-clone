@@ -4,7 +4,8 @@
 	"description": "browser multiplayer game based on websockets",
 	"main": "src/server/sockets-service.mjs",
 	"scripts": {
-		"start": "cd src/server && nodemon -r esm sockets-service.mjs",
+		"start": "cd src/server && node -r esm sockets-service.mjs",
+		"start:watch": "cd src/server && nodemon -r esm sockets-service.mjs",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "npx webpack",
 		"build:watch": "npx webpack --watch"
