@@ -1,16 +1,31 @@
 import set from 'lodash/set';
 import get from 'lodash/get';
 import doParticlesCollide from './helpers/doParticlesCollide';
+import { initialPlayerPosition } from './constants';
 
 const playerInserter = state => ({
 	insertPlayer: player => {
 		const playerObjectPath = `players[${player.id}]`;
 		player.id && player && set(state, playerObjectPath, player);
+		// set(state, playerObjectPath.inactivityTimeout, player)
 	},
 });
 
-const playerKiller = state => ({
-	killPlayer: id => id && set(state, `players[${id}].alive`, false),
+const playerKiller = (state, io) => ({
+	killPlayer: id => {
+		id && set(state, `players[${id}].alive`, false);
+		io.emit('player-has-been-killed', id);
+	},
+});
+
+const timerStarter = (state, { killPlayer }) => ({
+	startTimer: id => {
+		let inactivityTimeout = setTimeout(() => {
+			set(state, `players[${id}].inactivityTimeout`, inactivityTimeout);
+			console.log('inactivityTimeout: ', state.players[id].inactivityTimeout);
+			killPlayer(id);
+		}, 5000);
+	},
 });
 
 const playerRemover = state => ({
@@ -38,6 +53,17 @@ const sizeIncreaser = state => ({
 		const newSize = actualSize + sizeIncrease;
 		playerId && size && set(state, `players[${playerId}].size`, newSize);
 		return newSize || actualSize;
+	},
+});
+
+const playerResetter = state => ({
+	resetPlayer: id => {
+		set(state, `players[${id}].alive`, true);
+		set(state, `players[${id}].position`, {
+			x: initialPlayerPosition.x,
+			y: initialPlayerPosition.y,
+		});
+		set(state, `players[${id}].size`, 80);
 	},
 });
 
@@ -103,12 +129,14 @@ const PlayersFactory = io => {
 	return Object.freeze({
 		state,
 		...playerMover(state),
-		...playerKiller(state),
+		...playerKiller(state, io),
 		...playerRemover(state),
 		...positionGetter(state),
 		...sizeIncreaser(state),
 		...sizeSetter(state),
+		...timerStarter(state, playerKiller(state, io)),
 		...sizeGetter(state),
+		...playerResetter(state),
 		...collisionDetector(state, playerKiller(state), sizeIncreaser(state), io),
 		...playerInserter(state),
 	});

@@ -21,6 +21,7 @@ const deleter = state => ({
 
 const translater = (state, sk) => ({
 	translateFood: (x, y) => {
+		// console.log('food state: ', state);
 		state.translateVector.x = -x;
 		state.translateVector.y = -y;
 		sk.translate(state.translateVector.x, state.translateVector.y);

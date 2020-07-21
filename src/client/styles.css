@@ -50,6 +50,7 @@ body {
 	display: none;
 	justify-content: center;
 	align-items: center;
+	top: 0;
 }
 
 .death-window {
@@ -62,6 +63,7 @@ body {
 	flex-direction: column;
 	background-color: #ecbe7a;
 	font-size: 2rem;
+	align-items: center;
 }
 
 .death-window button {
@@ -71,6 +73,7 @@ body {
 	border-radius: 6px;
 	font-size: 1rem;
 	transition: background-color ease-in-out 0.1s;
+	align-self: stretch;
 }
 
 .death-window button:focus {
@@ -79,4 +82,8 @@ body {
 .death-window button:hover {
 	cursor: pointer;
 	background-color: #1f9c6f;
+}
+
+.death-window svg {
+	width: 100px;
 }

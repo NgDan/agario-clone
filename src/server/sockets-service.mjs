@@ -3,7 +3,11 @@ import http from 'http';
 import socketio from 'socket.io';
 import { FoodFactory } from './server-food.mjs';
 import { PlayersFactory } from './server-players.mjs';
-import { mapBoundary, initialPlayerSize } from './constants';
+import {
+	mapBoundary,
+	initialPlayerSize,
+	initialPlayerPosition,
+} from './constants';
 
 let app = express();
 let httpServer = http.createServer(app);
@@ -33,12 +37,22 @@ io.on('connection', socket => {
 
 	socket.on('player-joined', player => {
 		players.insertPlayer(player);
+		players.startTimer(player.id);
 		io.emit('server-player-joind', player);
 	});
 
 	socket.on('new-player-position', data => {
 		players.movePlayer(data.id, data.position);
 		io.emit('new-player-position-from-server', data);
+	});
+
+	socket.on('reset-player', id => {
+		console.log('reset-player event on server: ', id);
+		players.resetPlayer(id);
+		io.emit('new-player-position-from-server', {
+			id: id,
+			position: initialPlayerPosition,
+		});
 	});
 
 	socket.on('disconnect', () => {

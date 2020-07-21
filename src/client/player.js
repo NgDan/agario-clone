@@ -13,6 +13,7 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 
 	const keyHandler = (state, sk, socket) => ({
 		handleKeys: () => {
+			// console.log('state.speed: ', state.speed);
 			if (sk.keyIsDown(sk.LEFT_ARROW)) {
 				state.position.x = state.position.x - state.speed;
 				socket.emit('new-player-position', {
@@ -72,6 +73,10 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 		},
 	});
 
+	const playerResurecter = state => ({
+		resurectPlayer: () => set(state, 'alive', true),
+	});
+
 	const sizeUpdater = state => ({
 		updateSize: size => {
 			set(state, 'size', size);
@@ -86,12 +91,17 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 
 	const drawer = state => ({
 		draw: sk => {
+			// console.log(state);
 			if (state.alive) {
 				sk.push();
 				sk.fill(state.color);
 				sk.noStroke();
 				sk.translate(initialPlayerPosition.x, initialPlayerPosition.y);
+				console.log('initialPlayerPosition x: ', initialPlayerPosition.x);
+				console.log('initialPlayerPosition y: ', initialPlayerPosition.y);
 				sk.translate(-state.position.x, -state.position.y);
+				console.log('state.position x: ', -state.position.x);
+				console.log('state.position y: ', -state.position.y);
 				sk.ellipse(state.position.x, state.position.y, state.size);
 				sk.fill('white');
 				sk.pop();
@@ -106,6 +116,7 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 		...sizeUpdater(state),
 		...drawer(state),
 		...killer(state),
+		...playerResurecter(state),
 		...playerSyncer(state),
 	});
 }

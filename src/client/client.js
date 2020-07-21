@@ -93,16 +93,25 @@ let s = sk => {
 		});
 
 		// temporary for development purposes
-		document.querySelector('.add-overlay').addEventListener('click', food => {
+		document.querySelector('.add-overlay').addEventListener('click', () => {
 			// sk.socket.emit('reset-food');
-			console.log((overlay.style.display = 'flex'));
+			overlay.style.display = 'flex';
 		});
 		document
 			.querySelector('.remove-overlay')
 			.addEventListener('click', food => {
 				// sk.socket.emit('reset-food');
-				console.log((overlay.style.display = 'none'));
+				overlay.style.display = 'none';
 			});
+
+		document.querySelector('.reset-btn').addEventListener('click', () => {
+			sk.socket.emit('reset-player', sk.player.state.id);
+			sk.player.updatePosition(initialPlayerPosition);
+			sk.player.updateSize(80);
+			sk.player.resurectPlayer();
+			//missing reset alive state
+			overlay.style.display = 'none';
+		});
 	};
 
 	const draw = () => {
