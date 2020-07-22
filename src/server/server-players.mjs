@@ -7,7 +7,7 @@ const playerInserter = state => ({
 	insertPlayer: player => {
 		const playerObjectPath = `players[${player.id}]`;
 		player.id && player && set(state, playerObjectPath, player);
-		// set(state, playerObjectPath.inactivityTimeout, player)
+		set(state, playerObjectPath.inactivityTimeout, player);
 	},
 });
 
@@ -35,6 +35,14 @@ const playerRemover = state => ({
 const playerMover = state => ({
 	movePlayer: (id, position) =>
 		id && position && set(state, `players[${id}].position`, position),
+});
+
+const keepAliver = state => ({
+	keepAlive: id => {
+		const inactivityTimeoutRef = get(state, `players[${id}].inactivityTimeout`);
+		console.log(inactivityTimeoutRef);
+		clearTimeout(inactivityTimeoutRef);
+	},
 });
 
 const positionGetter = state => ({
@@ -137,7 +145,13 @@ const PlayersFactory = io => {
 		...timerStarter(state, playerKiller(state, io)),
 		...sizeGetter(state),
 		...playerResetter(state),
-		...collisionDetector(state, playerKiller(state), sizeIncreaser(state), io),
+		...collisionDetector(
+			state,
+			playerKiller(state, io),
+			sizeIncreaser(state),
+			io
+		),
+		...keepAliver(state),
 		...playerInserter(state),
 	});
 };

@@ -22,8 +22,9 @@ const playerSyncer = state => ({
 });
 
 const playerMover = state => ({
-	movePlayer: (id, position) =>
-		id && position && set(state, `players[${id}].position`, position),
+	movePlayer: (id, position) => {
+		id && position && set(state, `players[${id}].position`, position);
+	},
 });
 
 const positionGetter = state => ({

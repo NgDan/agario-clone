@@ -14,12 +14,15 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 	const keyHandler = (state, sk, socket) => ({
 		handleKeys: () => {
 			// console.log('state.speed: ', state.speed);
+
 			if (sk.keyIsDown(sk.LEFT_ARROW)) {
 				state.position.x = state.position.x - state.speed;
 				socket.emit('new-player-position', {
 					id: socket.id,
 					position: get(state, 'position'),
 				});
+
+				socket.emit('keep-alive', socket.id);
 
 				if (state.position.x < mapBoundary.min) {
 					state.position.x = mapBoundary.min;
@@ -32,6 +35,8 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 					position: get(state, 'position'),
 				});
 
+				socket.emit('keep-alive', socket.id);
+
 				if (state.position.x > mapBoundary.max) {
 					state.position.x = mapBoundary.max;
 				}
@@ -43,6 +48,8 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 					position: get(state, 'position'),
 				});
 
+				socket.emit('keep-alive', socket.id);
+
 				if (state.position.y < mapBoundary.min) {
 					state.position.y = mapBoundary.min;
 				}
@@ -53,6 +60,8 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 					id: socket.id,
 					position: get(state, 'position'),
 				});
+
+				socket.emit('keep-alive', socket.id);
 
 				if (state.position.y > mapBoundary.max) {
 					state.position.y = mapBoundary.max;
@@ -96,12 +105,10 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 				sk.push();
 				sk.fill(state.color);
 				sk.noStroke();
+
 				sk.translate(initialPlayerPosition.x, initialPlayerPosition.y);
-				console.log('initialPlayerPosition x: ', initialPlayerPosition.x);
-				console.log('initialPlayerPosition y: ', initialPlayerPosition.y);
 				sk.translate(-state.position.x, -state.position.y);
-				console.log('state.position x: ', -state.position.x);
-				console.log('state.position y: ', -state.position.y);
+
 				sk.ellipse(state.position.x, state.position.y, state.size);
 				sk.fill('white');
 				sk.pop();

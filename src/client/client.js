@@ -106,7 +106,10 @@ let s = sk => {
 
 		document.querySelector('.reset-btn').addEventListener('click', () => {
 			sk.socket.emit('reset-player', sk.player.state.id);
-			sk.player.updatePosition(initialPlayerPosition);
+			sk.player.updatePosition({
+				x: initialPlayerPosition.x,
+				y: initialPlayerPosition.y,
+			});
 			sk.player.updateSize(80);
 			sk.player.resurectPlayer();
 			//missing reset alive state

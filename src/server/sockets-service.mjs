@@ -49,10 +49,11 @@ io.on('connection', socket => {
 	socket.on('reset-player', id => {
 		console.log('reset-player event on server: ', id);
 		players.resetPlayer(id);
-		io.emit('new-player-position-from-server', {
-			id: id,
-			position: initialPlayerPosition,
-		});
+	});
+
+	socket.on('keep-alive', id => {
+		console.log('keep-alive: ', id);
+		players.keepAlive(id);
 	});
 
 	socket.on('disconnect', () => {
