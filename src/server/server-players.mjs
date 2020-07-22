@@ -21,10 +21,10 @@ const playerKiller = (state, io) => ({
 const timerStarter = (state, { killPlayer }) => ({
 	startTimer: id => {
 		let inactivityTimeout = setTimeout(() => {
-			set(state, `players[${id}].inactivityTimeout`, inactivityTimeout);
-			console.log('inactivityTimeout: ', state.players[id].inactivityTimeout);
 			killPlayer(id);
 		}, 5000);
+		set(state, `players[${id}].inactivityTimeout`, inactivityTimeout);
+		// console.log('inactivityTimeout: ', state.players[id].inactivityTimeout);
 	},
 });
 
@@ -37,11 +37,12 @@ const playerMover = state => ({
 		id && position && set(state, `players[${id}].position`, position),
 });
 
-const keepAliver = state => ({
+const keepAliver = (state, { startTimer }) => ({
 	keepAlive: id => {
 		const inactivityTimeoutRef = get(state, `players[${id}].inactivityTimeout`);
 		console.log(inactivityTimeoutRef);
 		clearTimeout(inactivityTimeoutRef);
+		startTimer(id);
 	},
 });
 
@@ -142,7 +143,7 @@ const PlayersFactory = io => {
 		...positionGetter(state),
 		...sizeIncreaser(state),
 		...sizeSetter(state),
-		...timerStarter(state, playerKiller(state, io)),
+		// ...timerStarter(state, playerKiller(state, io)),
 		...sizeGetter(state),
 		...playerResetter(state),
 		...collisionDetector(
@@ -151,7 +152,7 @@ const PlayersFactory = io => {
 			sizeIncreaser(state),
 			io
 		),
-		...keepAliver(state),
+		...keepAliver(state, timerStarter(state, playerKiller(state, io))),
 		...playerInserter(state),
 	});
 };

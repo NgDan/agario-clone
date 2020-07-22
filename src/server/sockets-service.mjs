@@ -37,7 +37,7 @@ io.on('connection', socket => {
 
 	socket.on('player-joined', player => {
 		players.insertPlayer(player);
-		players.startTimer(player.id);
+		// players.startTimer(player.id);
 		io.emit('server-player-joind', player);
 	});
 
