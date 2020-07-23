@@ -45,25 +45,27 @@ const createCollisionDetector = (
 			if (piece.active) {
 				for (let playerId in playersState) {
 					let player = playersState[playerId];
-					let playerProps = {
-						x: player.position.x,
-						y: player.position.y,
-						size: player.size,
-					};
-					let pieceOfFoodProps = {
-						x: piece.x,
-						y: piece.y,
-						size: foodState.foodSize,
-					};
-
-					if (doParticlesCollide(pieceOfFoodProps, playerProps)) {
-						deletePiece(id);
-						io.emit('piece-of-food-eaten', id);
-						increaseSize(playerId, 1);
-						io.emit('new-player-size', {
-							id: playerId,
+					if (player && player.position) {
+						let playerProps = {
+							x: player.position.x,
+							y: player.position.y,
 							size: player.size,
-						});
+						};
+						let pieceOfFoodProps = {
+							x: piece.x,
+							y: piece.y,
+							size: foodState.foodSize,
+						};
+
+						if (doParticlesCollide(pieceOfFoodProps, playerProps)) {
+							deletePiece(id);
+							io.emit('piece-of-food-eaten', id);
+							increaseSize(playerId, 1);
+							io.emit('new-player-size', {
+								id: playerId,
+								size: player.size,
+							});
+						}
 					}
 				}
 			}

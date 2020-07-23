@@ -3,28 +3,41 @@ import get from 'lodash/get';
 import doParticlesCollide from './helpers/doParticlesCollide';
 import { initialPlayerPosition } from './constants';
 
-const playerInserter = state => ({
+const playerInserter = (state, { startTimer }) => ({
 	insertPlayer: player => {
 		const playerObjectPath = `players[${player.id}]`;
 		player.id && player && set(state, playerObjectPath, player);
-		set(state, playerObjectPath.inactivityTimeout, player);
+		player.id && player.id;
+		startTimer(player.id);
 	},
 });
 
 const playerKiller = (state, io) => ({
 	killPlayer: id => {
 		id && set(state, `players[${id}].alive`, false);
-		io.emit('player-has-been-killed', id);
 	},
 });
 
-const timerStarter = (state, { killPlayer }) => ({
+const timerStarter = (state, { killPlayer }, io) => ({
 	startTimer: id => {
-		let inactivityTimeout = setTimeout(() => {
+		// let oldInactivityTimeout = get(state, `players[${id}].inactivityTimeout`);
+		clearTimeout(state.newInactivityTimeout);
+
+		function killPlayerCallback() {
 			killPlayer(id);
-		}, 5000);
-		set(state, `players[${id}].inactivityTimeout`, inactivityTimeout);
-		// console.log('inactivityTimeout: ', state.players[id].inactivityTimeout);
+			// console.log('io: ', io);
+			// console.log('id: ', id);
+			// io.emit('player-has-been-killed', id);
+		}
+
+		let newInactivityTimeout = setTimeout(killPlayerCallback, 5000);
+		state.newInactivityTimeout = newInactivityTimeout;
+		// set(
+		// 	state,
+		// 	`players[${id}].newInactivityTimeout`,
+		// 	setTimeout(killPlayerCallback, 5000)
+		// );
+		// clearTimeout(newInactivityTimeout);
 	},
 });
 
@@ -39,10 +52,14 @@ const playerMover = state => ({
 
 const keepAliver = (state, { startTimer }) => ({
 	keepAlive: id => {
-		const inactivityTimeoutRef = get(state, `players[${id}].inactivityTimeout`);
-		console.log(inactivityTimeoutRef);
-		clearTimeout(inactivityTimeoutRef);
+		console.log('inactivityTimeoutRef: ', state.newInactivityTimeout);
+		clearTimeout(state.newInactivityTimeout);
 		startTimer(id);
+		// const inactivityTimeoutRef = get(
+		// 	state,
+		// 	`players[${id}].newInactivityTimeout`
+		// );
+		// console.log('inactivityTimeoutRef: ', inactivityTimeoutRef);
 	},
 });
 
@@ -143,7 +160,7 @@ const PlayersFactory = io => {
 		...positionGetter(state),
 		...sizeIncreaser(state),
 		...sizeSetter(state),
-		// ...timerStarter(state, playerKiller(state, io)),
+		...timerStarter(state, playerKiller(state, io), io),
 		...sizeGetter(state),
 		...playerResetter(state),
 		...collisionDetector(
@@ -152,8 +169,8 @@ const PlayersFactory = io => {
 			sizeIncreaser(state),
 			io
 		),
-		...keepAliver(state, timerStarter(state, playerKiller(state, io))),
-		...playerInserter(state),
+		...keepAliver(state, timerStarter(state, playerKiller(state, io), io)),
+		...playerInserter(state, timerStarter(state, playerKiller(state, io), io)),
 	});
 };
 
