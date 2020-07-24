@@ -1,6 +1,6 @@
 import { initialPlayerPosition, mapBoundary, foodColors } from './constants';
 import getRandomArrayItem from '../helpers/getRandomArrayItem';
-import { set, get } from 'lodash';
+import { set, get, throttle } from 'lodash';
 export default function PlayerFactory(position, size, id, sk, socket) {
 	let state = {
 		id: id,
@@ -11,9 +11,16 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 		alive: true,
 	};
 
-	const keyHandler = (state, sk, socket) => ({
+	const keepAliver = socket => ({
+		keepAlive: throttle(() => {
+			socket.emit('keep-alive', socket.id);
+		}, 5000),
+	});
+
+	const keyHandler = (state, sk, socket, { keepAlive }) => ({
 		handleKeys: () => {
 			// console.log('state.speed: ', state.speed);
+			// const keepAliveThrottled = throttle(keepAlive(socket), 500);
 
 			if (sk.keyIsDown(sk.LEFT_ARROW)) {
 				state.position.x = state.position.x - state.speed;
@@ -22,7 +29,7 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 					position: get(state, 'position'),
 				});
 
-				socket.emit('keep-alive', socket.id);
+				keepAlive();
 
 				if (state.position.x < mapBoundary.min) {
 					state.position.x = mapBoundary.min;
@@ -35,7 +42,7 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 					position: get(state, 'position'),
 				});
 
-				socket.emit('keep-alive', socket.id);
+				keepAlive();
 
 				if (state.position.x > mapBoundary.max) {
 					state.position.x = mapBoundary.max;
@@ -48,7 +55,7 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 					position: get(state, 'position'),
 				});
 
-				socket.emit('keep-alive', socket.id);
+				keepAlive();
 
 				if (state.position.y < mapBoundary.min) {
 					state.position.y = mapBoundary.min;
@@ -61,7 +68,7 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 					position: get(state, 'position'),
 				});
 
-				socket.emit('keep-alive', socket.id);
+				keepAlive();
 
 				if (state.position.y > mapBoundary.max) {
 					state.position.y = mapBoundary.max;
@@ -118,7 +125,7 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 
 	return Object.freeze({
 		state,
-		...keyHandler(state, sk, socket),
+		...keyHandler(state, sk, socket, keepAliver(socket)),
 		...positionUpdater(state),
 		...sizeUpdater(state),
 		...drawer(state),

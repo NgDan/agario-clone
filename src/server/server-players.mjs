@@ -25,19 +25,13 @@ const timerStarter = (state, { killPlayer }, io) => ({
 
 		function killPlayerCallback() {
 			killPlayer(id);
-			// console.log('io: ', io);
-			// console.log('id: ', id);
-			// io.emit('player-has-been-killed', id);
+			io.emit('player-has-been-killed', id);
 		}
 
-		let newInactivityTimeout = setTimeout(killPlayerCallback, 5000);
-		state.newInactivityTimeout = newInactivityTimeout;
-		// set(
-		// 	state,
-		// 	`players[${id}].newInactivityTimeout`,
-		// 	setTimeout(killPlayerCallback, 5000)
-		// );
-		// clearTimeout(newInactivityTimeout);
+		let newInactivityTimeout = setTimeout(killPlayerCallback, 25000);
+		set(state, `inctivityTimeouts[${id}]`, newInactivityTimeout);
+		// state.newInactivityTimeout = newInactivityTimeout;
+		// console.log(get(state, `players`));
 	},
 });
 
@@ -52,14 +46,9 @@ const playerMover = state => ({
 
 const keepAliver = (state, { startTimer }) => ({
 	keepAlive: id => {
-		console.log('inactivityTimeoutRef: ', state.newInactivityTimeout);
-		clearTimeout(state.newInactivityTimeout);
+		// console.log('inactivityTimeoutRef: ', state.newInactivityTimeout);
+		clearTimeout(get(state, `inctivityTimeouts[${id}]`));
 		startTimer(id);
-		// const inactivityTimeoutRef = get(
-		// 	state,
-		// 	`players[${id}].newInactivityTimeout`
-		// );
-		// console.log('inactivityTimeoutRef: ', inactivityTimeoutRef);
 	},
 });
 
