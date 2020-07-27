@@ -3,12 +3,12 @@ import { FoodFactory } from './client-food';
 import PlayerFactory from './player';
 import { initialPlayerPosition } from './constants';
 import io from 'socket.io-client';
+import get from 'lodash/get';
 
 let s = sk => {
 	let overlay;
 	let checkExist = setInterval(() => {
 		if (document.querySelector('.overlay')) {
-			console.log('Exists!');
 			overlay = document.querySelector('.overlay');
 			clearInterval(checkExist);
 		}
@@ -29,14 +29,12 @@ let s = sk => {
 				sk,
 				sk.socket
 			);
-			console.log('connected');
 			sk.players = PlayersConstructor(sk);
 
 			sk.food = FoodFactory(10, sk);
 			sk.socket.emit('request-food');
 			sk.socket.emit('request-players');
 			sk.socket.emit('player-joined', sk.player.state);
-			console.log('player-joined: ', sk.player.state);
 		});
 
 		sk.socket.on('send-food', foodFromServer => {
@@ -45,7 +43,6 @@ let s = sk => {
 
 		// will replace old event
 		sk.socket.on('piece-of-food-eaten', id => {
-			console.log('piece of food eaten: ', id);
 			sk.food.deletePiece(id);
 		});
 
@@ -82,27 +79,32 @@ let s = sk => {
 		});
 
 		sk.socket.on('player-has-been-killed', id => {
-			console.log('player-has-been-killed: ', id);
 			sk.players.killPlayer(id);
+			if (id === get(sk, 'player.state.id')) {
+				overlay.style.display = 'flex';
+			}
 		});
 
 		document.addEventListener('visibilitychange', () => {
 			if (document.visibilityState === 'visible') {
 				sk.socket.emit('request-players');
 			}
+			if (!get(sk, 'player.state.alive')) {
+				overlay.style.display = 'flex';
+			}
 		});
 
 		// temporary for development purposes
-		document.querySelector('.add-overlay').addEventListener('click', () => {
-			// sk.socket.emit('reset-food');
-			overlay.style.display = 'flex';
-		});
-		document
-			.querySelector('.remove-overlay')
-			.addEventListener('click', food => {
-				// sk.socket.emit('reset-food');
-				overlay.style.display = 'none';
-			});
+		// document.querySelector('.add-overlay').addEventListener('click', () => {
+		// 	// sk.socket.emit('reset-food');
+		// 	overlay.style.display = 'flex';
+		// });
+		// document
+		// 	.querySelector('.remove-overlay')
+		// 	.addEventListener('click', food => {
+		// 		// sk.socket.emit('reset-food');
+		// 		overlay.style.display = 'none';
+		// 	});
 
 		document.querySelector('.reset-btn').addEventListener('click', () => {
 			sk.socket.emit('reset-player', sk.player.state.id);

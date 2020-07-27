@@ -20,7 +20,6 @@ const playerKiller = (state, io) => ({
 
 const timerStarter = (state, { killPlayer }, io) => ({
 	startTimer: id => {
-		// let oldInactivityTimeout = get(state, `players[${id}].inactivityTimeout`);
 		clearTimeout(state.newInactivityTimeout);
 
 		function killPlayerCallback() {
@@ -30,8 +29,6 @@ const timerStarter = (state, { killPlayer }, io) => ({
 
 		let newInactivityTimeout = setTimeout(killPlayerCallback, 25000);
 		set(state, `inctivityTimeouts[${id}]`, newInactivityTimeout);
-		// state.newInactivityTimeout = newInactivityTimeout;
-		// console.log(get(state, `players`));
 	},
 });
 
@@ -46,7 +43,6 @@ const playerMover = state => ({
 
 const keepAliver = (state, { startTimer }) => ({
 	keepAlive: id => {
-		// console.log('inactivityTimeoutRef: ', state.newInactivityTimeout);
 		clearTimeout(get(state, `inctivityTimeouts[${id}]`));
 		startTimer(id);
 	},
@@ -119,13 +115,11 @@ const collisionDetector = (state, { killPlayer }, { increaseSize }, io) => ({
 						if (particle1.size > particle2.size) {
 							killPlayer(particle2.id);
 							const newSize = increaseSize(particle1.id, particle2.size);
-							console.log('newSize: ', newSize);
 							io.emit('new-player-size', { id: particle1.id, size: newSize });
 							io.emit('player-has-been-killed', particle2.id);
 						} else {
 							killPlayer(particle1.id);
 							const newSize = increaseSize(particle2.id, particle1.size);
-							console.log('newSize: ', newSize);
 							io.emit('new-player-size', { id: particle2.id, size: newSize });
 							io.emit('player-has-been-killed', particle1.id);
 						}

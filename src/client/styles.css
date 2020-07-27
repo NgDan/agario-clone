@@ -40,6 +40,12 @@
 body {
 	margin: 0;
 	font-family: Roboto;
+	display: flex;
+	justify-content: center;
+}
+
+canvas {
+	margin-top: 5rem;
 }
 
 .overlay {
@@ -64,6 +70,11 @@ body {
 	background-color: #ecbe7a;
 	font-size: 2rem;
 	align-items: center;
+	margin: 0 3rem;
+}
+
+.death-window p {
+	text-align: center;
 }
 
 .death-window button {

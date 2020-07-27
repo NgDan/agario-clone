@@ -47,12 +47,10 @@ io.on('connection', socket => {
 	});
 
 	socket.on('reset-player', id => {
-		console.log('reset-player event on server: ', id);
 		players.resetPlayer(id);
 	});
 
 	socket.on('keep-alive', id => {
-		console.log('keep-alive: ', id);
 		players.keepAlive(id);
 	});
 

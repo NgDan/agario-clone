@@ -19,9 +19,6 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 
 	const keyHandler = (state, sk, socket, { keepAlive }) => ({
 		handleKeys: () => {
-			// console.log('state.speed: ', state.speed);
-			// const keepAliveThrottled = throttle(keepAlive(socket), 500);
-
 			if (sk.keyIsDown(sk.LEFT_ARROW)) {
 				state.position.x = state.position.x - state.speed;
 				socket.emit('new-player-position', {
@@ -107,7 +104,6 @@ export default function PlayerFactory(position, size, id, sk, socket) {
 
 	const drawer = state => ({
 		draw: sk => {
-			// console.log(state);
 			if (state.alive) {
 				sk.push();
 				sk.fill(state.color);
