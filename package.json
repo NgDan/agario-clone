@@ -23,7 +23,7 @@
 	"devDependencies": {
 		"esm": "^3.2.25",
 		"express": "^4.17.1",
-		"lodash": "^4.17.19",
+		"lodash": "^4.17.21",
 		"ramda": "^0.27.0",
 		"socket.io": "^2.3.0",
 		"webpack": "^4.42.1",
